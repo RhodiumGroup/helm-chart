@@ -1,6 +1,6 @@
 .DS_Store
 kubernetes/helm-config.yaml
 *.lock
-charts/
-values.yaml
-secret.yaml
+rhg-pangeo/charts/
+rhg-pangeo/values.yaml
+rhg-pangeo/secret.yaml
