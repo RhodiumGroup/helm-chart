@@ -24,9 +24,12 @@ metadata:
     release: {{ .Release.Name }}
 rules:
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["pods", "pods/logs"]
+  resources: ["pods"]
   verbs: ["get", "list", "watch", "create", "delete"]
-
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods/log"]
+  verbs: ["get", "list"]
+  
 ---
 
 kind: RoleBinding
