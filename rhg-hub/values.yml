@@ -17,7 +17,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: 2018-05-21
+      tag: 2018-06-12.04
     storage:
       capacity: 10Gi
     dynamic:
@@ -50,14 +50,13 @@ jupyterhub:
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
         c.Authenticator.whitelist = {"jgerardsimcock", 
-                                      "delgadom", 
-                                      "moonlimb", 
-                                      "kemccusker", 
-                                      "vania-fong",
+                                      "delgadom",
+                                      "moonlimb",
+                                      "kemccusker",
                                       "wjherndon",
                                       "pmarster",
                                       "hpitt",
-                                      "smohan", 
+                                      "smohan",
                                       "bollinger32"
                                       }
         c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
