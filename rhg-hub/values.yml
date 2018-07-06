@@ -57,13 +57,11 @@ jupyterhub:
                                       "pmarster",
                                       "hpitt",
                                       "smohan",
-                                      "bollinger32"
+                                      "bolliger32"
                                       }
         c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
         c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/',
                                     '/usr/local/share/jupyter/hub/templates/']
-
-    
 
     image:
       name: jupyterhub/k8s-hub
@@ -79,10 +77,17 @@ jupyterhub:
         subPath: "rhodium-custom-jupyterhub-templates/templates"
       - mountPath: /usr/local/share/jupyter/hub/static/custom
         name: custom-templates
-        subPath: "rhodium-custom-jupyterhub-templates/assets"     
-    
+        subPath: "rhodium-custom-jupyterhub-templates/assets"  
+
+  proxy: 
+    service: 
+      loadBalancerIP: 35.203.134.147
   cull:
-    enabled: False
+    enabled: True
     users: false
-    timeout: 1200
+    timeout: 3600
     every: 600 
+
+  prePuller:
+    hook:
+      enabled: True

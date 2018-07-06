@@ -1,0 +1,29 @@
+metadata:
+spec:
+  restartPolicy: Never
+  containers:
+  - args:
+      - dask-worker
+      - --nthreads
+      - '2'
+      - --no-bokeh
+      - --memory-limit
+      - 6GB
+      - --death-timeout
+      - '60'
+    env:
+      - name: GCSFUSE_BUCKET
+        value: rhg-data
+    image: rhodium/worker:2018-07-03.01
+    name: dask-worker
+    securityContext:
+      capabilities:
+        add: [SYS_ADMIN]
+      privileged: true
+    resources:
+      limits:
+        cpu: "3.5"
+        memory: 12G
+      requests:
+        cpu: "3.5"
+        memory: 12G

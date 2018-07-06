@@ -1,6 +1,0 @@
-charts:
-  - name: rhg-hub
-    imagePrefix: rhg-hub/
-    repo:
-      git: RhodiumGroup/helm-chart
-      published: https://RhodiumGroup.github.io/helm-chart

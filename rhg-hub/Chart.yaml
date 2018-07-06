@@ -1,6 +1,6 @@
 apiVersion: v1
 name: rhg-hub
-version: 0.1.3
+version: 0.1.4
 description: An extention of jupyterhub-pangeo
 sources:
   - 'https://jupyterhub.github.io/helm-chart/'
