@@ -1,6 +1,6 @@
 charts:
   - name: rhg-hub
-    imagePrefix: rhg-hub/
+    imagePrefix: rhodium/
     repo:
       git: RhodiumGroup/helm-chart
       published: https://RhodiumGroup.github.io/helm-chart
@@ -8,3 +8,5 @@ charts:
       notebook:
         contextPath: docker_images/notebook
         valuesPath: jupyterhub.singleuser.image
+      # worker: 
+      #   contextPath: docker_images/worker
