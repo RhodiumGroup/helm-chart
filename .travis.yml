@@ -35,6 +35,9 @@ script:
 #     docker push rhodium/notebook:$TAG;
 #     fi
 
+git:
+  depth: false
+
 deploy:
   provider: script
   skip_cleanup: true
