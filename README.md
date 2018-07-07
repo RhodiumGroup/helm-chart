@@ -1,1 +1,1 @@
-Rhodiums helm chart
+Rhodiums helm charts: https://rhodiumgroup.github.io/helm-chart/
