@@ -38,6 +38,7 @@ RUN conda install --yes -c conda-forge \
     dask-ml \
     distributed=1.21.5 \
     fastparquet \
+    ipdb \
     ipywidgets \
     holoviews \
     lz4 \
@@ -51,6 +52,7 @@ RUN conda install --yes -c conda-forge \
     numpy=1.14.2 \
     pandas \
     python-blosc \
+    pyviz_comms \
     scipy \
     scikit-image \
     scikit-learn \
