@@ -12,7 +12,7 @@ env:
 # - chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
 
 install:
-  - cd notebook
+  - cd docker_images/notebook
   - docker build -t rhodium/notebook:$TAG .
   - cd ../worker
   - docker build -t rhodium/worker:$TAG .
