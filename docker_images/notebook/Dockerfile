@@ -56,6 +56,7 @@ RUN conda install --yes -c conda-forge \
     scipy \
     scikit-image \
     scikit-learn \
+    statsmodels \
     tornado \
     xarray=0.10.7 \
     zict \

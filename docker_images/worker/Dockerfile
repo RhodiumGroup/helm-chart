@@ -31,6 +31,7 @@ RUN conda install --yes -c conda-forge \
     python-blosc \
     scipy \
     scikit-image \
+    statsmodels \
     tornado \
     xarray=0.10.7 \
     zict \
