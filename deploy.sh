@@ -14,9 +14,9 @@ helm repo update
 
 helm dependency update rhg-hub
 
-docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+#docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 
 export GIT_SSH_COMMAND="ssh -i ${PWD}/github_deploy_key" 
 
-chartpress --commit-range ${TRAVIS_COMMIT_RANGE} --push --publish-chart
+chartpress --commit-range ${TRAVIS_COMMIT_RANGE} --publish-chart
 # git diff
