@@ -8,5 +8,5 @@ charts:
       notebook:
         contextPath: docker_images/notebook
         valuesPath: jupyterhub.singleuser.image
-      # worker: 
-      #   contextPath: docker_images/worker
+      worker: 
+        contextPath: docker_images/worker
