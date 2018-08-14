@@ -18,11 +18,11 @@ script:
   - docker stop notebook
   - docker pull $WORKER_IMAGE
   - # start scheduler in notebook server
-  - docker run -p 8888:8888 -p 8786:8786 -p 8787:8787 -d rhodium/notebook:dev start.sh /opt/conda/bin/dask-scheduler --port 8786 --bokeh-port 8787 &
+  - docker run -p 8888:8888 -p 8786:8786 -p 8787:8787 -d $NOTEBOOK_IMAGE start.sh /opt/conda/bin/dask-scheduler --port 8786 --bokeh-port 8787 &
   - # start worker
-  - docker run -p 8666:8666 -p 8785:8785 --net="host" -d rhodium/worker:dev /opt/conda/bin/dask-worker localhost:8786 --worker-port 8666 --nanny-port 8785 &
+  - docker run -p 8666:8666 -p 8785:8785 --net="host" -d $WORKER_IMAGE /opt/conda/bin/dask-worker localhost:8786 --worker-port 8666 --nanny-port 8785 &
   - # notebook server for user connection
-  - docker create --name tester -p 8765:8765 rhodium/notebook:dev
+  - docker create --name tester -p 8765:8765 $NOTEBOOK_IMAGE
   - # copy test suite to test image
   - docker cp notebook_test.py tester:/usr/bin
   - # run test suite
@@ -58,7 +58,7 @@ deploy:
     # script: bash deploy.sh
     env:
       - LOAD_BALANCER_IP=35.230.96.6
-        
+
     on:
       branch: dev
 
