@@ -26,6 +26,7 @@ script:
   - # copy test suite to test image
   - docker cp notebook_test.py tester:/usr/bin
   - # run test suite
+  - docker start tester
   - docker exec tester python /usr/bin/notebook_test.py
 
   # - chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
