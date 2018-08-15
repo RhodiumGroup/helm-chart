@@ -4,7 +4,7 @@ echo "pull notebook $NOTEBOOK_IMAGE"
 docker pull $NOTEBOOK_IMAGE
 
 echo "start notebook image"
-docker start -d --name notebook -t $NOTEBOOK_IMAGE /bin/bash
+docker run -d --name notebook -t $NOTEBOOK_IMAGE /bin/bash
 
 echo "copy worker template from running notebook"
 docker cp notebook:/pre-home/worker-template.yml worker-template.yml
