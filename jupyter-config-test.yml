@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: 60bea573930380975dcbd0fa55f910872d98159c
+      tag: fbb4a04f3829f12c81812573c54d8e52aba324ce
     storage:
       capacity: 10Gi
     dynamic:
