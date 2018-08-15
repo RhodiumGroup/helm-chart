@@ -1,3 +1,5 @@
+set -e
+
 NOTEBOOK_IMAGE=$(python -c "import yaml; f = open('jupyter-config.yml'); spec = yaml.load(f.read()); print('{}:{}'.format(spec['jupyterhub']['singleuser']['image']['name'], spec['jupyterhub']['singleuser']['image']['tag']));")
 
 echo "pull notebook $NOTEBOOK_IMAGE"
