@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: 60bea573930380975dcbd0fa55f910872d98159c
+      tag: 2018-07-05.01
     storage:
       capacity: 10Gi
     dynamic:
@@ -38,44 +38,38 @@ jupyterhub:
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
         c.Authenticator.whitelist = {"jgerardsimcock", 
-                                      "delgadom", 
-                                      "moonlimb", 
-                                      "kemccusker", 
-                                      "smohan-rhg",
-                                      "wjherndon",
-                                      "bolliger32",
-                                      "hpitt"}
+                                      "delgadom",
+                                      "jiacan", 
+                                      "andyhultgren",
+                                      "kemccusker"
+                                      }
 
 
         c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
         c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/',
-                                      '/usr/local/share/jupyter/hub/templates/']
+                                    '/usr/local/share/jupyter/hub/templates/']
 
     extraVolumes:
       - name: custom-templates
         gitRepo:
-          repository: "https://github.com/RhodiumGroup/rhodium-custom-jupyterhub-templates.git"
+          repository: "https://github.com/ClimateImpactLab/climate-impactlab-templates.git"
     extraVolumeMounts:
       - mountPath: /usr/local/share/jupyter/hub/custom_templates
         name: custom-templates
-        subPath: "rhodium-custom-jupyterhub-templates/templates"
+        subPath: "climate-impactlab-templates/templates"
       - mountPath: /usr/local/share/jupyter/hub/static/custom
         name: custom-templates
-        subPath: "rhodium-custom-jupyterhub-templates/assets" 
-
-    image:
-      name: jupyterhub/k8s-hub
-      tag: 36188c8  
-
+        subPath: "climate-impactlab-templates/assets"  
   proxy: 
     service: 
-      loadBalancerIP: $LOAD_BALANCER_IP
+      loadBalancerIP: 35.233.200.119
+    
   cull:
-    enabled: false
+    enabled: true
     users: false
     timeout: 3600
     every: 600 
 
   prePuller:
     hook:
-      enabled: true
+      enabled: false

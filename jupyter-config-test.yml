@@ -46,7 +46,6 @@ jupyterhub:
                                       "bolliger32",
                                       "hpitt"}
 
-
         c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
         c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/',
                                       '/usr/local/share/jupyter/hub/templates/']
@@ -65,13 +64,13 @@ jupyterhub:
 
     image:
       name: jupyterhub/k8s-hub
-      tag: 36188c8  
+      tag: 36188c8
 
   proxy: 
     service: 
-      loadBalancerIP: $LOAD_BALANCER_IP
+      loadBalancerIP: 35.230.96.6
   cull:
-    enabled: false
+    enabled: true
     users: false
     timeout: 3600
     every: 600 

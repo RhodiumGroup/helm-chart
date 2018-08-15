@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: 60bea573930380975dcbd0fa55f910872d98159c
+      tag: d272539c5b1c3b44264293743e90b0141972ad75
     storage:
       capacity: 10Gi
     dynamic:
@@ -46,7 +46,6 @@ jupyterhub:
                                       "bolliger32",
                                       "hpitt"}
 
-
         c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
         c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/',
                                       '/usr/local/share/jupyter/hub/templates/']
@@ -61,7 +60,7 @@ jupyterhub:
         subPath: "rhodium-custom-jupyterhub-templates/templates"
       - mountPath: /usr/local/share/jupyter/hub/static/custom
         name: custom-templates
-        subPath: "rhodium-custom-jupyterhub-templates/assets" 
+        subPath: "rhodium-custom-jupyterhub-templates/assets"
 
     image:
       name: jupyterhub/k8s-hub
@@ -69,7 +68,7 @@ jupyterhub:
 
   proxy: 
     service: 
-      loadBalancerIP: $LOAD_BALANCER_IP
+      loadBalancerIP: 35.203.134.147
   cull:
     enabled: false
     users: false
