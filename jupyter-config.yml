@@ -61,7 +61,7 @@ jupyterhub:
         subPath: "rhodium-custom-jupyterhub-templates/templates"
       - mountPath: /usr/local/share/jupyter/hub/static/custom
         name: custom-templates
-        subPath: "rhodium-custom-jupyterhub-templates/assets" 
+        subPath: "rhodium-custom-jupyterhub-templates/assets"
 
     image:
       name: jupyterhub/k8s-hub

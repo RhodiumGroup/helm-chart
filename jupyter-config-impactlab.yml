@@ -47,7 +47,7 @@ jupyterhub:
 
         c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
         c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/',
-                                    '/usr/local/share/jupyter/hub/templates/']
+                                      '/usr/local/share/jupyter/hub/templates/']
 
     extraVolumes:
       - name: custom-templates
@@ -59,11 +59,15 @@ jupyterhub:
         subPath: "climate-impactlab-templates/templates"
       - mountPath: /usr/local/share/jupyter/hub/static/custom
         name: custom-templates
-        subPath: "climate-impactlab-templates/assets"  
+        subPath: "climate-impactlab-templates/assets"
+
+    image:
+      name: jupyterhub/k8s-hub
+      tag: 36188c8  
+
   proxy: 
     service: 
       loadBalancerIP: 35.233.200.119
-    
   cull:
     enabled: true
     users: false
