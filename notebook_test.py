@@ -12,14 +12,14 @@ def square(x):
 
 
 def test_square():
-    client = dd.Client("localhost:8786")
+    client = dd.Client("127.0.0.1:8786")
     futures = client.map(lambda x: x**2, range(10))
     total = client.gather(client.submit(sum, futures))
     assert total == 285, total
 
 
 def test_imports():
-    client = dd.Client("localhost:8786")
+    client = dd.Client("127.0.0.1:8786")
     futures = client.map(remote_fiona_import, range(10))
     total = client.gather(futures)
 

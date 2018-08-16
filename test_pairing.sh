@@ -28,7 +28,7 @@ echo "start worker"
 docker run -p 127.0.0.1:8666:8666 -p 127.0.0.1:8785:8785 -d $WORKER_IMAGE /opt/conda/bin/dask-worker 127.0.0.1:8786 --worker-port 8666 --nanny-port 8785 &
 
 echo "notebook server for user connection"
-docker create --name tester -p 127.0.0.1:8765:8765 $NOTEBOOK_IMAGE
+docker create --name tester -p 127.0.0.1:8765:8765 --net="host" $NOTEBOOK_IMAGE
 
 echo "copy test suite to test image"
 docker cp notebook_test.py tester:/usr/bin
