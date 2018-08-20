@@ -25,10 +25,10 @@ echo "start scheduler in notebook server"
 docker run -p 127.0.0.1:8888:8888 -p 127.0.0.1:8786:8786 -p 127.0.0.1:8787:8787 -d $NOTEBOOK_IMAGE start.sh /opt/conda/bin/dask-scheduler --port 8786 --bokeh-port 8787 &
 
 echo "start worker"
-docker run -p 127.0.0.1:8666:8666 -p 127.0.0.1:8785:8785 -d $WORKER_IMAGE /opt/conda/bin/dask-worker 127.0.0.1:8786 --worker-port 8666 --nanny-port 8785 &
+docker run --net="host" -d $WORKER_IMAGE /opt/conda/bin/dask-worker 127.0.0.1:8786 --worker-port 8666 --nanny-port 8785 &
 
 echo "notebook server for user connection"
-docker create --name tester -p 127.0.0.1:8765:8765 --net="host" $NOTEBOOK_IMAGE
+docker create --name tester --net="host" $NOTEBOOK_IMAGE
 
 echo "copy test suite to test image"
 docker cp notebook_test.py tester:/usr/bin
@@ -38,5 +38,9 @@ docker start tester
 
 echo "run test suite"
 docker exec tester python /usr/bin/notebook_test.py
+
+echo "closing containers"
+docker stop $(docker ps -q);
+docker rm $(docker ps --all -q);
 
 echo "done"

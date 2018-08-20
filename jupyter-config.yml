@@ -44,7 +44,8 @@ jupyterhub:
                                       "smohan-rhg",
                                       "wjherndon",
                                       "bolliger32",
-                                      "hpitt"}
+                                      "hpitt",
+                                      "jaysayre"}
 
 
         c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
@@ -65,11 +66,25 @@ jupyterhub:
 
     image:
       name: jupyterhub/k8s-hub
-      tag: 36188c8  
+      tag: 36188c8
 
-  proxy: 
-    service: 
-      loadBalancerIP: $LOAD_BALANCER_IP
+  proxy:
+    https:
+      letsencrypt:
+        contactEmail: jsimcock@rhg.com
+
+  auth:
+    type: github
+
+    admin:
+      access: true
+      users:
+        - jgerardsimcock
+        - delgadom
+        - moonlimb
+        - bolliger32
+        - kemccusker
+
   cull:
     enabled: false
     users: false
