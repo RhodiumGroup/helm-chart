@@ -4,7 +4,7 @@ set -e
 
 CLUSTER_NAME=test-hub
 
-./gcloud-sdk-configure.sh
+bash gcloud-sdk-configure.sh
 
 gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECT_ID
 
