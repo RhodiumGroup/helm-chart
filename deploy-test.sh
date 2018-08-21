@@ -19,7 +19,7 @@ gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $
 # kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 
 echo "init"
-helm init --service-account tiller
+helm init --service-account tiller --upgrade
 
 # echo "patch deployment"
 # kubectl --namespace=kube-system patch deployment tiller-deploy \
