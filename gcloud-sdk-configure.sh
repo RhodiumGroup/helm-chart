@@ -12,7 +12,7 @@ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-ad
 kubectl --namespace kube-system create sa tiller
 kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 
-export HELM_HOST=localhost:44134
+# export HELM_HOST=localhost:44134
 helm init --client-only --service-account tiller
 kubectl --namespace=kube-system patch deployment tiller-deploy \
     --type=json \
