@@ -8,7 +8,7 @@ bash gcloud-sdk-configure.sh
 
 gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECT_ID
 
-helm upgrade --dry-run test-hub rhg-hub -f jupyter-config.yml \
+helm upgrade --install --dry-run test-hub rhg-hub -f jupyter-config.yml \
     --set jupyterhub.cull.enabled=true \
     --set jupyterhub.proxy.service.loadBalancerIP=$LOAD_BALANCER_IP_TEST \
     --set jupyterhub.proxy.https.hosts={$DOMAIN_TEST} \
