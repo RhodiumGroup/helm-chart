@@ -8,6 +8,7 @@ gcloud auth activate-service-account --key-file "${GOOGLE_APPLICATION_CREDENTIAL
 gcloud config set project $PROJECT_ID
 gcloud config set compute/zone $ZONE
 
+export HELM_HOST=localhost:44134
 helm init --service-account tiller
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo add rhg-hub https://rhodiumgroup.github.io/helm-chart/
