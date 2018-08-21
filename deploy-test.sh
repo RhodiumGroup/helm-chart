@@ -38,7 +38,7 @@ helm dependency update rhg-hub
 echo "repo update"
 helm repo update
 
-helm upgrade --install --dry-run test-hub rhg-hub -f jupyter-config.yml \
+helm upgrade --install test-hub rhg-hub -f jupyter-config.yml \
     --set jupyterhub.cull.enabled=true \
     --set jupyterhub.proxy.service.loadBalancerIP=$LOAD_BALANCER_IP_TEST \
     --set jupyterhub.proxy.https.hosts={$DOMAIN_TEST} \
