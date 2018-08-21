@@ -19,7 +19,7 @@ gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $
 # kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 
 echo "init"
-helm init --client-only --service-account tiller
+helm init --service-account tiller
 
 # echo "patch deployment"
 # kubectl --namespace=kube-system patch deployment tiller-deploy \
@@ -38,7 +38,7 @@ helm dependency update rhg-hub
 echo "repo update"
 helm repo update
 
-helm upgrade --install --dry-run test-hub rhg-hub -f jupyter-config.yml \
+helm upgrade --dry-run test-hub rhg-hub -f jupyter-config.yml \
     --set jupyterhub.cull.enabled=true \
     --set jupyterhub.proxy.service.loadBalancerIP=$LOAD_BALANCER_IP_TEST \
     --set jupyterhub.proxy.https.hosts={$DOMAIN_TEST} \
