@@ -6,7 +6,37 @@ CLUSTER_NAME=test-hub
 
 bash gcloud-sdk-configure.sh
 
+echo "get credentials"
 gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECT_ID
+
+echo "create clusterrolebinding cluster-admin-binding"
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$EMAIL
+
+echo "create tiller"
+kubectl --namespace kube-system create sa tiller
+
+echo "create clusterrolebinding tiller"
+kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+
+echo "init"
+helm init --client-only --service-account tiller
+
+echo "patch deployment"
+kubectl --namespace=kube-system patch deployment tiller-deploy \
+    --type=json \
+    --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
+
+echo "repo add jupyterhub"
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+
+echo "repo add rhg-hub"
+helm repo add rhg-hub https://rhodiumgroup.github.io/helm-chart/
+
+echo "dependency update rhg-hub"
+helm dependency update rhg-hub
+
+echo "repo update"
+helm repo update
 
 helm upgrade --install --dry-run test-hub rhg-hub -f jupyter-config.yml \
     --set jupyterhub.cull.enabled=true \
