@@ -12,4 +12,4 @@ echo "config set project"
 gcloud config set project $PROJECT_ID
 
 echo "config set compute/zones"
-gcloud config set compute/zone $zone
+gcloud config set compute/zone $ZONE
