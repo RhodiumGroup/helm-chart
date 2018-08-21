@@ -43,11 +43,6 @@ install:
 - tar -xvf /tmp/helm-linux-amd64.tar.gz -C /tmp/
 - chmod +x  /tmp/linux-amd64/helm && sudo mv /tmp/linux-amd64/helm /usr/local/bin/
 - bash gcloud-sdk-configure.sh
-- helm serve &
-- sleep 1m
-- helm repo add local http://localhost:8879/charts
-- helm repo update
-
 
 script:
   - echo "done"
