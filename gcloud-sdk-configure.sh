@@ -10,4 +10,5 @@ gcloud config set compute/zone $ZONE
 
 helm init --client-only --service-account tiller
 helm dependency update rhg-hub
+helm repo add https://jupyterhub.github.io/helm-chart/
 helm repo add rhg-hub
