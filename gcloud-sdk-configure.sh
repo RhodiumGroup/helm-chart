@@ -8,5 +8,5 @@ gcloud auth activate-service-account --key-file "${GOOGLE_APPLICATION_CREDENTIAL
 gcloud config set project $PROJECT_ID
 gcloud config set compute/zone $ZONE
 
-helm init --service-account tiller
+helm init --client-only --service-account tiller
 helm dependency update rhg-hub
