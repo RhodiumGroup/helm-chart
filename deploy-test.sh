@@ -10,13 +10,14 @@ echo "get credentials"
 gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECT_ID
 
 # echo "create clusterrolebinding cluster-admin-binding"
-# kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$EMAIL
+# kubectl create clusterrolebinding travis-cluster-admin-binding --clusterrole=cluster-admin --user=$TRAVIS_SERVICE_ACCOUNT || \
+#     kubectl get clusterrolebinding travis-cluster-admin-binding
 
 # echo "create tiller"
-# kubectl --namespace kube-system create sa tiller
+kubectl --namespace kube-system create sa tiller || kubectl --namespace kube-system get sa tiller
 
 # echo "create clusterrolebinding tiller"
-# kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 
 echo "init"
 helm init --service-account tiller --upgrade
