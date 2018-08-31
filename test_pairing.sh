@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -e
 
 NOTEBOOK_IMAGE=$(python -c "import yaml; f = open('jupyter-config.yml'); spec = yaml.load(f.read()); print('{}:{}'.format(spec['jupyterhub']['singleuser']['image']['name'], spec['jupyterhub']['singleuser']['image']['tag']));")
@@ -22,7 +24,7 @@ echo "pull worker $WORKER_IMAGE"
 docker pull $WORKER_IMAGE
 
 echo "start scheduler in notebook server"
-docker run -p 127.0.0.1:8888:8888 -p 127.0.0.1:8786:8786 -p 127.0.0.1:8787:8787 -d $NOTEBOOK_IMAGE start.sh /opt/conda/bin/dask-scheduler --port 8786 --bokeh-port 8787 &
+docker run --net="host" -d $NOTEBOOK_IMAGE start.sh /opt/conda/bin/dask-scheduler --port 8786 --bokeh-port 8787 &
 
 echo "start worker"
 docker run --net="host" -d $WORKER_IMAGE /opt/conda/bin/dask-worker 127.0.0.1:8786 --worker-port 8666 --nanny-port 8785 &
