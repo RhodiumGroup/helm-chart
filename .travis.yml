@@ -49,7 +49,7 @@ install:
 - bash gcloud-sdk-configure.sh
 
 script:
-- echo "done"
+- bash test_pairing.sh
 
 deploy:
 - provider: script
