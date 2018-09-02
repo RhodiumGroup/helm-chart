@@ -24,10 +24,10 @@ echo "pull worker $WORKER_IMAGE"
 docker pull $WORKER_IMAGE
 
 echo "start scheduler in notebook server"
-docker run --net="host" -d $NOTEBOOK_IMAGE start.sh /opt/conda/bin/dask-scheduler --port 8786 --bokeh-port 8787 &
+docker run --net="host" -d $NOTEBOOK_IMAGE start.sh dask-scheduler --port 8786 --bokeh-port 8787 &
 
 echo "start worker"
-docker run --net="host" -d $WORKER_IMAGE /opt/conda/bin/dask-worker 127.0.0.1:8786 --worker-port 8666 --nanny-port 8785 &
+docker run --net="host" -d $WORKER_IMAGE dask-worker 127.0.0.1:8786 --worker-port 8666 --nanny-port 8785 &
 
 echo "notebook server for user connection"
 docker create --name tester --net="host" $NOTEBOOK_IMAGE

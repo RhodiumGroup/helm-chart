@@ -51,15 +51,15 @@ install:
 script:
 - bash test_pairing.sh
 
-deploy:
-- provider: script
-  skip_cleanup: true
-  script: bash deploy-test.sh
-  on:
-    branch: dev
+# deploy:
+# - provider: script
+#   skip_cleanup: true
+#   script: bash deploy-test.sh
+#   on:
+#     branch: dev
 
-- provider: script
-  skip_cleanup: true
-  script: bash deploy-prod.sh
-  on:
-    branch: master
+# - provider: script
+#   skip_cleanup: true
+#   script: bash deploy-prod.sh
+#   on:
+#     branch: master
