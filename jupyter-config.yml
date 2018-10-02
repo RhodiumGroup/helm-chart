@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: dev
+      tag: v0.2.2
     storage:
       capacity: 10Gi
     dynamic:
@@ -45,7 +45,8 @@ jupyterhub:
                                       "wjherndon",
                                       "bolliger32",
                                       "hpitt",
-                                      "jaysayre"}
+                                      "jaysayre",
+                                      "hanskolus"}
 
 
         c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
@@ -84,6 +85,11 @@ jupyterhub:
         - moonlimb
         - bolliger32
         - kemccusker
+        - smohan-rhg
+        - wjherndon
+        - hpitt
+        - jaysayre
+        - hanskolus
 
   cull:
     enabled: false
