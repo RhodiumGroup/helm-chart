@@ -1,0 +1,98 @@
+rbac:
+  enabled: true
+
+jupyterhub:
+  singleuser:
+    image:
+      name: rhodium/notebook
+      tag: v0.2.2
+    storage:
+      capacity: 10Gi
+    dynamic:
+      storageClass: jupyterhub-user-ssd
+    serviceAccountName: daskkubernetes
+    cmd: ['start-singleuser.sh']
+    defaultUrl: "/lab"
+    storage:
+      extraVolumes:
+        - name: fuse
+          hostPath:
+            path: /dev/fuse
+      extraVolumeMounts:
+        - name: fuse
+          mountPath: /dev/fuse
+    cloudMetadata:
+      enabled: true
+
+  hub:
+    extraConfig: 
+      customPodHook: |
+        from kubernetes import client
+        def modify_pod_hook(spawner, pod):
+            pod.spec.containers[0].security_context = client.V1SecurityContext(
+                privileged=True,
+                capabilities=client.V1Capabilities(
+                    add=['SYS_ADMIN']
+                )
+            )
+            return pod
+        c.KubeSpawner.modify_pod_hook = modify_pod_hook
+        c.Authenticator.whitelist = {
+          "andyhultgren",
+          "bolliger32",
+          "delgadom",
+          "jgerardsimcock", 
+          "jiacan", 
+          "kemccusker",
+          "moonlimb"
+          }
+
+
+        c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
+        c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/',
+                                    '/usr/local/share/jupyter/hub/templates/']
+
+    extraVolumes:
+      - name: custom-templates
+        gitRepo:
+          repository: "https://github.com/ClimateImpactLab/climate-impactlab-templates.git"
+    extraVolumeMounts:
+      - mountPath: /usr/local/share/jupyter/hub/custom_templates
+        name: custom-templates
+        subPath: "climate-impactlab-templates/templates"
+      - mountPath: /usr/local/share/jupyter/hub/static/custom
+        name: custom-templates
+        subPath: "climate-impactlab-templates/assets"
+
+    image:
+      name: jupyterhub/k8s-hub
+      tag: 36188c8
+
+  proxy:
+    https:
+      letsencrypt:
+        contactEmail: jsimcock@rhg.com
+
+  auth:
+    type: github
+
+    admin:
+      access: true
+      users:
+        - andyhultgren
+        - bolliger32
+        - delgadom
+        - jgerardsimcock
+        - jiacan
+        - kemccusker
+        - moonlimb
+
+  cull:
+    enabled: true
+    users: false
+    timeout: 3600
+    every: 600 
+
+  prePuller:
+    hook:
+      enabled: true
