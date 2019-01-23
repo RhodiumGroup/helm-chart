@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: v0.2.2
+      tag: v0.2.5
     storage:
       capacity: 10Gi
     dynamic:
@@ -25,7 +25,7 @@ jupyterhub:
       enabled: true
 
   hub:
-    extraConfig: 
+    extraConfig:
       customPodHook: |
         from kubernetes import client
         def modify_pod_hook(spawner, pod):
@@ -37,16 +37,26 @@ jupyterhub:
             )
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
-        c.Authenticator.whitelist = {"jgerardsimcock", 
-                                      "delgadom", 
-                                      "moonlimb", 
-                                      "kemccusker", 
-                                      "smohan-rhg",
-                                      "wjherndon",
-                                      "bolliger32",
-                                      "hpitt",
-                                      "jaysayre",
-                                      "hanskolus"}
+        c.Authenticator.whitelist = {
+
+            # rhodium
+            "delgadom",
+            "moonlimb",
+            "kemccusker",
+            "smohan-rhg",
+            "wjherndon",
+            "hpitt",
+            "hanskolus",
+
+            # coastal
+            "bolliger32",
+
+            # wildfires
+            "jaysayre",
+            "andyhultgren",
+            "cledna",
+            "samirasiddique",
+            }
 
 
         c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
@@ -72,7 +82,7 @@ jupyterhub:
   proxy:
     https:
       letsencrypt:
-        contactEmail: jsimcock@rhg.com
+        contactEmail: mdelgado@rhg.com
 
   auth:
     type: github
@@ -80,22 +90,13 @@ jupyterhub:
     admin:
       access: true
       users:
-        - jgerardsimcock
         - delgadom
-        - moonlimb
-        - bolliger32
-        - kemccusker
-        - smohan-rhg
-        - wjherndon
-        - hpitt
-        - jaysayre
-        - hanskolus
 
   cull:
     enabled: false
     users: false
     timeout: 3600
-    every: 600 
+    every: 600
 
   prePuller:
     hook:
