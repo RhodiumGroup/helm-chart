@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: v0.2.2
+      tag: 428880eeccbcca2870dfeffa11a0934d696a5677
     storage:
       capacity: 10Gi
     dynamic:
@@ -72,7 +72,7 @@ jupyterhub:
   proxy:
     https:
       letsencrypt:
-        contactEmail: jsimcock@rhg.com
+        contactEmail: mdelgado@rhg.com
 
   auth:
     type: github
@@ -92,10 +92,10 @@ jupyterhub:
         - hanskolus
 
   cull:
-    enabled: false
+    enabled: true
     users: false
-    timeout: 3600
-    every: 600 
+    timeout: 172800
+    every: 3600
 
   prePuller:
     hook:
