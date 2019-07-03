@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: v0.2.2
+      tag: v0.2.5
     storage:
       capacity: 10Gi
     dynamic:
@@ -25,7 +25,7 @@ jupyterhub:
       enabled: true
 
   hub:
-    extraConfig: 
+    extraConfig:
       customPodHook: |
         from kubernetes import client
         def modify_pod_hook(spawner, pod):
@@ -41,10 +41,12 @@ jupyterhub:
           "andyhultgren",
           "bolliger32",
           "delgadom",
-          "jgerardsimcock", 
-          "jiacan", 
+          "jgerardsimcock",
+          "jiacan",
           "kemccusker",
-          "moonlimb"
+          "moonlimb",
+          "jrising",
+          "trinetta"
           }
 
 
@@ -71,7 +73,7 @@ jupyterhub:
   proxy:
     https:
       letsencrypt:
-        contactEmail: jsimcock@rhg.com
+        contactEmail: mdelgado@rhg.com
 
   auth:
     type: github
@@ -86,12 +88,14 @@ jupyterhub:
         - jiacan
         - kemccusker
         - moonlimb
+        - jrising
+        - trinetta
 
   cull:
     enabled: true
     users: false
-    timeout: 3600
-    every: 600 
+    timeout: 86400
+    every: 600
 
   prePuller:
     hook:
