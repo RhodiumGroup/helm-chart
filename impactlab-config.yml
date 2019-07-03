@@ -38,15 +38,17 @@ jupyterhub:
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
         c.Authenticator.whitelist = {
-          "andyhultgren",
-          "bolliger32",
-          "delgadom",
-          "jgerardsimcock",
-          "jiacan",
-          "kemccusker",
-          "moonlimb",
-          "jrising",
-          "trinetta"
+            "delgadom",
+            "kemccusker",
+            "mattgoldklang",
+            "moonlimb",
+            "andyhultgren",
+            "bolliger32",
+            "jiacan",
+            "jrising",
+            "trinetta",
+            "simondgreenhill",
+            "atrisovic"
           }
 
 
@@ -81,20 +83,12 @@ jupyterhub:
     admin:
       access: true
       users:
-        - andyhultgren
-        - bolliger32
         - delgadom
-        - jgerardsimcock
-        - jiacan
-        - kemccusker
-        - moonlimb
-        - jrising
-        - trinetta
 
   cull:
     enabled: true
     users: false
-    timeout: 86400
+    timeout: 172800
     every: 600
 
   prePuller:
