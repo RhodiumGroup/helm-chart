@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: v0.2.2
+      tag: v0.2.5
     storage:
       capacity: 10Gi
     dynamic:
@@ -25,7 +25,7 @@ jupyterhub:
       enabled: true
 
   hub:
-    extraConfig: 
+    extraConfig:
       customPodHook: |
         from kubernetes import client
         def modify_pod_hook(spawner, pod):
@@ -38,13 +38,13 @@ jupyterhub:
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
         c.Authenticator.whitelist = {
-          "andyhultgren",
-          "bolliger32",
-          "delgadom",
-          "jgerardsimcock", 
-          "jiacan", 
-          "kemccusker",
-          "moonlimb"
+            "delgadom",
+            "kemccusker",
+            "mattgoldklang",
+            "moonlimb",
+            "andyhultgren",
+            "bolliger32",
+            "jiacan",
           }
 
 
@@ -71,7 +71,7 @@ jupyterhub:
   proxy:
     https:
       letsencrypt:
-        contactEmail: jsimcock@rhg.com
+        contactEmail: mdelgado@rhg.com
 
   auth:
     type: github
@@ -79,19 +79,13 @@ jupyterhub:
     admin:
       access: true
       users:
-        - andyhultgren
-        - bolliger32
         - delgadom
-        - jgerardsimcock
-        - jiacan
-        - kemccusker
-        - moonlimb
 
   cull:
     enabled: true
     users: false
-    timeout: 3600
-    every: 600 
+    timeout: 172800
+    every: 600
 
   prePuller:
     hook:

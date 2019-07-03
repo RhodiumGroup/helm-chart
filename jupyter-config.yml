@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: v0.2.5
+      tag: 7a5cfebdf2598f712f6193024d120716457f3869
     storage:
       capacity: 10Gi
     dynamic:
@@ -38,20 +38,17 @@ jupyterhub:
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
         c.Authenticator.whitelist = {
-
-            # rhodium
             "delgadom",
-            "moonlimb",
             "kemccusker",
+            "alihamidi1",
+            "mattgoldklang",
             "smohan-rhg",
             "wjherndon",
             "hpitt",
             "hanskolus",
-
-            # coastal
+            "moonlimb",
             "bolliger32",
-
-            # wildfires
+            "ferleejc",
             "jaysayre",
             "andyhultgren",
             "cledna",
@@ -93,9 +90,9 @@ jupyterhub:
         - delgadom
 
   cull:
-    enabled: false
+    enabled: true
     users: false
-    timeout: 3600
+    timeout: 259200
     every: 600
 
   prePuller:
