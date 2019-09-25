@@ -38,22 +38,22 @@ jupyterhub:
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
         c.Authenticator.whitelist = {
-            "delgadom",
-            "kemccusker",
-            "alihamidi1",
-            "mattgoldklang",
-            "brews",
-            "smohan-rhg",
-            "wjherndon",
-            "hpitt",
-            "hanskolus",
-            "moonlimb",
             "bolliger32",
-            "ferleejc",
-            "jaysayre",
+            "brews",
+            "delgadom",
+            "dgergel",
+            "alihamidi1",
             "andyhultgren",
             "cledna",
+            "ferleejc",
+            "hanskolus",
+            "hpitt",
+            "jaysayre",
+            "kemccusker",
+            "mattgoldklang",
             "samirasiddique",
+            "smohan-rhg",
+            "wjherndon",
             }
 
 
@@ -88,7 +88,10 @@ jupyterhub:
     admin:
       access: true
       users:
+        - bolliger32
+        - brews
         - delgadom
+        - dgergel
 
   cull:
     enabled: true

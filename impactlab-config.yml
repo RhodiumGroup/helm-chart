@@ -38,17 +38,18 @@ jupyterhub:
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
         c.Authenticator.whitelist = {
-            "delgadom",
-            "kemccusker",
-            "mattgoldklang",
-            "brews",
             "andyhultgren",
-            "bolliger32",
+            "atrisovic",
+            "brews",
+            "delgadom",
+            "dgergel",
+            "dpa9694",
             "jiacan",
             "jrising",
-            "trinetta",
+            "kemccusker",
+            "mattgoldklang",
             "simondgreenhill",
-            "atrisovic"
+            "trinetta",
           }
 
 
@@ -70,7 +71,7 @@ jupyterhub:
 
     image:
       name: jupyterhub/k8s-hub
-      tag: 36188c8
+      tag: 0.8.2
 
   proxy:
     https:
@@ -84,6 +85,12 @@ jupyterhub:
       access: true
       users:
         - delgadom
+        - andyhultgren
+        - dgergel
+        - jiacan
+        - jrising
+        - kemccusker
+        - trinetta
 
   cull:
     enabled: true
