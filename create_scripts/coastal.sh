@@ -39,6 +39,7 @@ kubectl --namespace=kube-system patch deployment tiller-deploy --type=json --pat
 
 # Make sure you are in the rhg-hub repo
 # update the jupyterhub dependency just to check
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 helm dependency update rhg-hub
 
 # generate a secret token for the cluster
