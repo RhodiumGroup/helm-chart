@@ -5,7 +5,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: v0.2.5
+      tag: 21b4d14bc057fbdbd60db6bb20751840fbc0508d
     storage:
       capacity: 10Gi
     dynamic:
@@ -25,6 +25,8 @@ jupyterhub:
       enabled: true
 
   hub:
+    pdb:
+        minAvailable: 0
     extraConfig:
       customPodHook: |
         from kubernetes import client
@@ -75,7 +77,7 @@ jupyterhub:
 
     image:
       name: jupyterhub/k8s-hub
-      tag: 36188c8
+      tag: 0.8.2
 
   proxy:
     https:
