@@ -62,7 +62,7 @@ helm install rhg-hub --name=$DEPLOYMENT_NAME --namespace=$CLUSTER_NAME --timeout
 echo "waiting for cluster to boot"
 sleep 120
 
-EXTERNAL_IP=$(kubectl -n test-cluster get service proxy-public -o wide | awk '{print $4}' | tail -n1)
+EXTERNAL_IP=$(kubectl -n $NAMESPACE get service proxy-public -o wide | awk '{print $4}' | tail -n1)
 
 echo "IMPORTANT"
 echo "To update the cluster, run the following command. Save this somewhere as you will need the secret tokens:"
