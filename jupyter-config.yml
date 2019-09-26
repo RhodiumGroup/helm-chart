@@ -2,10 +2,24 @@ rbac:
   enabled: true
 
 jupyterhub:
+  scheduling:
+    podPriority:
+      enabled: false
+      globalDefault: false
+      defaultPriority: 0
+      userPlaceholderPriority: -10
+    userScheduler:
+      enabled: false
+      pdb:
+        enabled: false
+    userPlaceholder:
+      enabled: false
+      pdb:
+        enabled: false
   singleuser:
     image:
       name: rhodium/notebook
-      tag: 21b4d14bc057fbdbd60db6bb20751840fbc0508d
+      tag: c2569a7f4a26ae5f136d141999663919274614d1
     storage:
       capacity: 10Gi
     dynamic:
@@ -26,7 +40,8 @@ jupyterhub:
 
   hub:
     pdb:
-        minAvailable: 0
+      enabled: false
+      minAvailable: 0
     extraConfig:
       customPodHook: |
         from kubernetes import client
