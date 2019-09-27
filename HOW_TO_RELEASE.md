@@ -59,7 +59,7 @@ Clone the [helm chart repo](https://github.com/RhodiumGroup/helm-chart/). Create
 
 Modify the notebook tag deployed by changing the `jupyterhub.singleuser.image.tag` field in `jupyter-config.yml` and `impactlab-config.yml`. We test using the former spec, so impactlab-config is only used for the compute.impactlab.org deployment, but it’s good practice to keep these in sync, and you’ll need to make sure they’re in sync before your PR gets merged and deployed to the production servers.
 
-### Push your changes to your new branch on github
+### Push your changes to your helm-chart branch
 
 We test the pairing of the core notebook & worker on travis. The notebook image you specify in `jupyter-config.yml` will be pulled and booted in the travis environment. Inside the notebook image, the `worker-template.yml` file includes the name & tag of the paired worker image it was built with (identified either by commit hash or release tag) (we [sneak this in](https://github.com/RhodiumGroup/docker_images/blob/master/.travis.yml#L12) during the docker_image travis build process). Testing this pairing by pushing to github will give you another check to make sure that your build will deploy successfully.
  
