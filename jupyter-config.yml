@@ -1,40 +1,10 @@
-rbac:
-  enabled: true
-
 jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: cae6ff6183f6c342f081e77406306eec1dae3faf
+      tag: 3b02164fb005b284f3edcef8d2d675eada290894
     storage:
       capacity: 10Gi
-    dynamic:
-      storageClass: jupyterhub-user-ssd
-    serviceAccountName: daskkubernetes
-    cmd: ['start-singleuser.sh']
-    defaultUrl: "/lab"
-    storage:
-      extraVolumes:
-        - name: fuse
-          hostPath:
-            path: /dev/fuse
-      extraVolumeMounts:
-        - name: fuse
-          mountPath: /dev/fuse
-    cloudMetadata:
-      enabled: true
-  scheduling:
-    podPriority:
-      enabled: true
-      globalDefault: false
-      defaultPriority: 0
-      userPlaceholderPriority: -10
-    userScheduler:
-      enabled: true
-      replicas: 2
-    userPlaceholder:
-      enabled: true
-      replicas: 2
   hub:
     pdb:
       enabled: false
@@ -51,69 +21,6 @@ jupyterhub:
             )
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
-        c.Authenticator.whitelist = {
-            "bolliger32",
-            "brews",
-            "delgadom",
-            "dgergel",
-            "alihamidi1",
-            "andyhultgren",
-            "cledna",
-            "dpa9694",
-            "ferleejc",
-            "hanskolus",
-            "hpitt",
-            "jaysayre",
-            "kemccusker",
-            "mattgoldklang",
-            "samirasiddique",
-            "smohan-rhg",
-            "wjherndon",
-            }
-
-
-        c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
-        c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/',
-                                      '/usr/local/share/jupyter/hub/templates/']
-
-    extraVolumes:
-      - name: custom-templates
-        gitRepo:
-          repository: "https://github.com/RhodiumGroup/rhodium-custom-jupyterhub-templates.git"
-    extraVolumeMounts:
-      - mountPath: /usr/local/share/jupyter/hub/custom_templates
-        name: custom-templates
-        subPath: "rhodium-custom-jupyterhub-templates/templates"
-      - mountPath: /usr/local/share/jupyter/hub/static/custom
-        name: custom-templates
-        subPath: "rhodium-custom-jupyterhub-templates/assets"
-
-    image:
-      name: jupyterhub/k8s-hub
-      tag: 0.8.2
-
-  proxy:
-    https:
-      letsencrypt:
-        contactEmail: mdelgado@rhg.com
-
-  auth:
-    type: github
-
-    admin:
-      access: true
-      users:
-        - bolliger32
-        - brews
-        - delgadom
-        - dgergel
 
   cull:
-    enabled: true
-    users: false
     timeout: 259200
-    every: 600
-
-  prePuller:
-    hook:
-      enabled: true

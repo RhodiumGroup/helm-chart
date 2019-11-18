@@ -1,0 +1,5 @@
+jupyterhub:
+  singleuser:
+    image:
+      name: rhodium/notebook
+      tag:

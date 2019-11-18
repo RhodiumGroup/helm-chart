@@ -6,8 +6,8 @@ set -e
 EMAIL=$(gcloud config get-value account)
 PROJECTID=$(gcloud config get-value project)
 ZONE=$(gcloud config get-value compute/zone)
-CLUSTER_NAME=test-cluster-3
-DEPLOYMENT_NAME=test-cluster-3
+CLUSTER_NAME=test-cluster-2
+DEPLOYMENT_NAME=test-cluster-2
 URL=test2.climate-kube.com
 HELM_SPEC=jupyter-config.yml
 NUM_NODES=1
@@ -17,27 +17,29 @@ DISK_SIZE=100
 PREEMPTIBLE_FLAG=
 # PREEMPTIBLE_FLAG=--preemptible
 
-# Start cluster on Google cloud
-# gcloud container clusters create $CLUSTER_NAME --num-nodes=$NUM_NODES \
-#   --machine-type=n1-standard-2 --zone=$ZONE --project=$PROJECTID \
-#   --enable-ip-alias --no-enable-legacy-authorization
-#
-# #this enables autoscaling of the cluster
-# gcloud container node-pools create worker-pool --zone=$ZONE \
-#   --cluster=$CLUSTER_NAME --machine-type=n1-highmem-8 $PREEMPTIBLE_FLAG \
-#   --num-nodes=$MIN_WORKER_NODES  --disk-size=$DISK_SIZE
-# gcloud container clusters update $CLUSTER_NAME --zone=$ZONE \
-#   --node-pool=worker-pool --enable-autoscaling --max-nodes=$MAX_WORKER_NODES \
-#   --min-nodes=$MIN_WORKER_NODES
-#
-# # make sure you have the credentials for this cluster loaded
-# gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE \
-#   --project $PROJECTID
-#
-# #this will give you admin access on the cluster
-# kubectl create clusterrolebinding cluster-admin-binding \
-#   --clusterrole=cluster-admin --user=$EMAIL
-#
+Start cluster on Google cloud
+gcloud container clusters create $CLUSTER_NAME --num-nodes=$NUM_NODES \
+  --machine-type=n1-standard-2 --zone=$ZONE --project=$PROJECTID \
+  --enable-ip-alias --no-enable-legacy-authorization
+
+#this enables autoscaling of the cluster
+gcloud container node-pools create worker-pool --zone=$ZONE \
+  --cluster=$CLUSTER_NAME --machine-type=n1-highmem-8 $PREEMPTIBLE_FLAG \
+  --num-nodes=$MIN_WORKER_NODES  --disk-size=$DISK_SIZE
+gcloud container clusters update $CLUSTER_NAME --zone=$ZONE \
+  --node-pool=worker-pool --enable-autoscaling --max-nodes=$MAX_WORKER_NODES \
+  --min-nodes=$MIN_WORKER_NODES
+
+# make sure you have the credentials for this cluster loaded
+gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE \
+  --project $PROJECTID
+
+#this will give you admin access on the cluster
+kubectl create clusterrolebinding cluster-admin-binding \
+  --clusterrole=cluster-admin --user=$EMAIL
+
+# ############
+# ## Only if helm 2
 # #Give the tiller process cluster-admin status
 # kubectl create serviceaccount tiller --namespace=kube-system
 # kubectl create clusterrolebinding tiller --clusterrole cluster-admin \
@@ -49,15 +51,23 @@ PREEMPTIBLE_FLAG=
 # # this patches the security of the deployment so that no other processes in the cluster can access the other pods
 # kubectl --namespace=kube-system patch deployment tiller-deploy --type=json \
 #   --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
-#
-# # Make sure you are in the rhg-hub repo
-# # update the jupyterhub dependency just to check
-# helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-# helm repo update
-# helm dependency update rhg-hub
+# ############
+
+# ############
+# ## Only if helm 3
+# create namespace
+kubectl create namespace test-cluster-3
+# ############
+
+# Make sure you are in the rhg-hub repo
+# update the jupyterhub dependency just to check
+helm repo add pangeo https://pangeo-data.github.io/helm-chart/
+helm repo update
+helm dependency update rhg-hub
 
 # generate a secret token for the cluster
 secret_token=$(openssl rand -hex 32)
+
 
 helm install $DEPLOYMENT_NAME rhg-hub --namespace=$CLUSTER_NAME --timeout 600s -f $HELM_SPEC \
     --set jupyterhub.proxy.https.hosts="{${URL}}" \
