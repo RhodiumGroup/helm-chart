@@ -1,10 +1,12 @@
 apiVersion: v1
 name: rhg-hub
-version: v0.1.5
-tag: 
+version: v0.1.6
+tag:
 description: An extention of jupyterhub-pangeo
-sources:
-  - 'https://jupyterhub.github.io/helm-chart/'
 maintainers:
-  - name: Justin Simcock (Rhodium Group)
-    email: jsimcock@rhg.com
+  - name: Ian Bolliger (UC Berkeley)
+    email: bolliger@berkeley.edu
+  - name: Michael Delgado (Rhodium Group)
+    email: mdelgado@rhg.com
+  - name: Brewster Malevich (Rhodium Group)
+    email: bmalevich@rhg.com
