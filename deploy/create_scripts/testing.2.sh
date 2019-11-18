@@ -52,7 +52,6 @@ gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $
 secret_token=$(openssl rand -hex 32)
 
 helm install rhg-hub --name=$DEPLOYMENT_NAME --namespace=$CLUSTER_NAME --timeout 600 -f $HELM_SPEC \
-    --set jupyterhub.cull.enabled=true \
     --set jupyterhub.proxy.https.hosts="{${URL}}" \
     --set jupyterhub.proxy.secretToken="${secret_token}" \
     --set jupyterhub.auth.github.clientId="${GITHUB_CLIENT_ID}" \
@@ -69,7 +68,6 @@ echo "To update the cluster, run the following command. Save this somewhere as y
 echo
 
 echo "helm upgrade ${CLUSTER_NAME} rhg-hub --timeout 600 -f $HELM_SPEC \\"
-echo "   --set jupyterhub.cull.enabled=true \\"
 echo "   --set jupyterhub.proxy.service.loadBalancerIP=${EXTERNAL_IP} \\"
 echo "   --set jupyterhub.proxy.https.hosts=\"{${URL}}\" \\"
 echo "   --set jupyterhub.proxy.secretToken=\"${secret_token}\" \\"
