@@ -3,18 +3,6 @@ rbac:
 
 jupyterhub:
   singleuser:
-    scheduling:
-      podPriority:
-        enabled: true
-        globalDefault: false
-        defaultPriority: 0
-        userPlaceholderPriority: -10
-      userScheduler:
-        enabled: true
-        replicas: 2
-      userPlaceholder:
-        enabled: true
-        replicas: 2
     image:
       name: rhodium/notebook
       tag: cae6ff6183f6c342f081e77406306eec1dae3faf
@@ -35,7 +23,18 @@ jupyterhub:
           mountPath: /dev/fuse
     cloudMetadata:
       enabled: true
-
+  scheduling:
+    podPriority:
+      enabled: true
+      globalDefault: false
+      defaultPriority: 0
+      userPlaceholderPriority: -10
+    userScheduler:
+      enabled: true
+      replicas: 2
+    userPlaceholder:
+      enabled: true
+      replicas: 2
   hub:
     pdb:
       enabled: false
