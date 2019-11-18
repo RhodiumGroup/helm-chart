@@ -17,46 +17,65 @@ DISK_SIZE=100
 PREEMPTIBLE_FLAG=
 # PREEMPTIBLE_FLAG=--preemptible
 
-# Start cluster on Google cloud
-gcloud container clusters create $CLUSTER_NAME --num-nodes=$NUM_NODES --machine-type=n1-standard-2 --zone=$ZONE --project=$PROJECTID --enable-ip-alias
+Start cluster on Google cloud
+gcloud container clusters create $CLUSTER_NAME --num-nodes=$NUM_NODES \
+  --machine-type=n1-standard-2 --zone=$ZONE --project=$PROJECTID \
+  --enable-ip-alias --no-enable-legacy-authorization
 
 #this enables autoscaling of the cluster
-gcloud container node-pools create worker-pool --zone=$ZONE --cluster=$CLUSTER_NAME --machine-type=n1-highmem-8 $PREEMPTIBLE_FLAG --enable-autoscaling --num-nodes=$MIN_WORKER_NODES --max-nodes=$MAX_WORKER_NODES --min-nodes=$MIN_WORKER_NODES --disk-size=$DISK_SIZE
+gcloud container node-pools create worker-pool --zone=$ZONE \
+  --cluster=$CLUSTER_NAME --machine-type=n1-highmem-8 $PREEMPTIBLE_FLAG \
+  --num-nodes=$MIN_WORKER_NODES  --disk-size=$DISK_SIZE
+gcloud container clusters update $CLUSTER_NAME --zone=$ZONE \
+  --node-pool=worker-pool --enable-autoscaling --max-nodes=$MAX_WORKER_NODES \
+  --min-nodes=$MIN_WORKER_NODES
+
+# make sure you have the credentials for this cluster loaded
+gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE \
+  --project $PROJECTID
 
 #this will give you admin access on the cluster
-kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$EMAIL
+kubectl create clusterrolebinding cluster-admin-binding \
+  --clusterrole=cluster-admin --user=$EMAIL
 
-#we create a service account tiller in the kube-system namespace
-#tiller is the server/cluster side tool for helm to install and manage our containers
-#This produce a service account names tiller in the kube cluster
-kubectl --namespace kube-system create sa tiller
+# ############
+# ## Only if helm 2
+# #Give the tiller process cluster-admin status
+# kubectl create serviceaccount tiller --namespace=kube-system
+# kubectl create clusterrolebinding tiller --clusterrole cluster-admin \
+#   --serviceaccount=kube-system:tiller
+#
+# #strangely this allows helm to install tiller into the kubernetes cluster
+# helm init --service-account tiller
+#
+# # this patches the security of the deployment so that no other processes in the cluster can access the other pods
+# kubectl --namespace=kube-system patch deployment tiller-deploy --type=json \
+#   --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
+# ############
 
-#Give the tiller process cluster-admin status
-kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
-
-#strangely this allows helm to install tiller into the kubernetes cluster
-helm init --service-account tiller
-
-# this patches the security of the deployment so that no other processes in the cluster can access the other pods
-kubectl --namespace=kube-system patch deployment tiller-deploy --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
+# ############
+# ## Only if helm 3
+# create namespace
+kubectl create namespace test-cluster-3
+# ############
 
 # Make sure you are in the rhg-hub repo
 # update the jupyterhub dependency just to check
-helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
+helm repo add pangeo https://pangeo-data.github.io/helm-chart/
+helm repo update
 helm dependency update rhg-hub
-
-# make sure you have the credentials for this cluster loaded
-gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECTID
 
 # generate a secret token for the cluster
 secret_token=$(openssl rand -hex 32)
 
-helm install rhg-hub --name=$DEPLOYMENT_NAME --namespace=$CLUSTER_NAME --timeout 600 -f $HELM_SPEC \
-    --set jupyterhub.proxy.https.hosts="{${URL}}" \
-    --set jupyterhub.proxy.secretToken="${secret_token}" \
-    --set jupyterhub.auth.github.clientId="${GITHUB_CLIENT_ID}" \
-    --set jupyterhub.auth.github.clientSecret="${GITHUB_SECRET_TOKEN}" \
-    --set jupyterhub.auth.github.callbackUrl="https://${URL}/hub/oauth_callback"
+
+helm install $DEPLOYMENT_NAME pangeo/pangeo --devel --namespace=$CLUSTER_NAME \
+  --timeout 600s -f $HELM_SPEC \
+  --set jupyterhub.proxy.https.hosts="{${URL}}" \
+  --set jupyterhub.proxy.secretToken="${secret_token}" \
+  --set jupyterhub.auth.github.clientId="${GITHUB_CLIENT_ID}" \
+  --set jupyterhub.auth.github.clientSecret="${GITHUB_SECRET_TOKEN}" \
+  --set jupyterhub.auth.github.callbackUrl="https://${URL}/hub/oauth_callback"
 
 echo "waiting for cluster to boot"
 sleep 120
@@ -67,7 +86,7 @@ echo "IMPORTANT"
 echo "To update the cluster, run the following command. Save this somewhere as you will need the secret tokens:"
 echo
 
-echo "helm upgrade ${CLUSTER_NAME} rhg-hub --timeout 600 -f $HELM_SPEC \\"
+echo "helm upgrade ${DEPLOYMENT_NAME} pangeo/pangeo --devel --timeout 600s -f $HELM_SPEC \\"
 echo "   --set jupyterhub.proxy.service.loadBalancerIP=${EXTERNAL_IP} \\"
 echo "   --set jupyterhub.proxy.https.hosts=\"{${URL}}\" \\"
 echo "   --set jupyterhub.proxy.secretToken=\"${secret_token}\" \\"
