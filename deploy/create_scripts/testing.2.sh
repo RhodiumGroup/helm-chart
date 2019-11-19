@@ -56,7 +56,7 @@ kubectl create clusterrolebinding cluster-admin-binding \
 # ############
 # ## Only if helm 3
 # create namespace
-kubectl create namespace test-cluster-3
+kubectl create namespace test-cluster-2
 # ############
 
 # Make sure you are in the rhg-hub repo
@@ -68,7 +68,8 @@ helm dependency update rhg-hub
 # generate a secret token for the cluster
 secret_token=$(openssl rand -hex 32)
 
-
+## NOTE: you will need to change 600s to 600 in both the install and upgrade commands
+## if working with Helm 2
 helm install $DEPLOYMENT_NAME pangeo/pangeo --devel --namespace=$CLUSTER_NAME \
   --timeout 600s -f $HELM_SPEC \
   --set jupyterhub.proxy.https.hosts="{${URL}}" \
