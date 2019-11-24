@@ -39,7 +39,14 @@ kubectl create clusterrolebinding cluster-admin-binding \
   --clusterrole=cluster-admin --user=$EMAIL
 
 # ############
-# ## Only if helm 2
+# ## Only strictly necessary if helm 3 (but ok to do either way)
+# create namespace
+kubectl create namespace $DEPLOYMENT_NAME
+# ############
+
+
+# ############
+# ## Only necessary if helm 2 (will break otherwise b/c helm 3 has no tiller)
 # #Give the tiller process cluster-admin status
 # kubectl create serviceaccount tiller --namespace=kube-system
 # kubectl create clusterrolebinding tiller --clusterrole cluster-admin \
@@ -53,23 +60,16 @@ kubectl create clusterrolebinding cluster-admin-binding \
 #   --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
 # ############
 
-# ############
-# ## Only if helm 3
-# create namespace
-kubectl create namespace test-cluster-3
-# ############
-
-# Make sure you are in the rhg-hub repo
-# update the jupyterhub dependency just to check
+# Make sure you are in the rhg-hub repo for this:
 helm repo add pangeo https://pangeo-data.github.io/helm-chart/
 helm repo update
-helm dependency update rhg-hub
 
 # generate a secret token for the cluster
 secret_token=$(openssl rand -hex 32)
 
-
-helm install $DEPLOYMENT_NAME pangeo/pangeo --devel --namespace=$CLUSTER_NAME \
+## NOTE: you will need to change 600s to 600 in both the install and upgrade commands
+## if working with Helm 2
+helm install $DEPLOYMENT_NAME pangeo/pangeo --devel --namespace=$DEPLOYMENT_NAME \
   --timeout 600s -f $HELM_SPEC \
   --set jupyterhub.proxy.https.hosts="{${URL}}" \
   --set jupyterhub.proxy.secretToken="${secret_token}" \
@@ -86,7 +86,7 @@ echo "IMPORTANT"
 echo "To update the cluster, run the following command. Save this somewhere as you will need the secret tokens:"
 echo
 
-echo "helm upgrade ${DEPLOYMENT_NAME} pangeo/pangeo --devel --timeout 600s -f $HELM_SPEC \\"
+echo "helm upgrade ${DEPLOYMENT_NAME} pangeo/pangeo --devel --timeout 600s --namespace=${DEPLOYMENT_NAME} -f $HELM_SPEC \\"
 echo "   --set jupyterhub.proxy.service.loadBalancerIP=${EXTERNAL_IP} \\"
 echo "   --set jupyterhub.proxy.https.hosts=\"{${URL}}\" \\"
 echo "   --set jupyterhub.proxy.secretToken=\"${secret_token}\" \\"
