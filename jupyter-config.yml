@@ -2,10 +2,12 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: 23806e1caca6501bd3a89aea0f71615172bc4cb3
+      tag: dev-merge-octave
     storage:
       capacity: 10Gi
   hub:
+    db:
+      upgrade: true
     pdb:
       enabled: false
       minAvailable: 0
@@ -21,6 +23,9 @@ jupyterhub:
             )
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
+  scheduling:
+    userPlaceholder:
+      enabled: false
 
   cull:
     timeout: 259200
