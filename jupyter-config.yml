@@ -1,54 +1,53 @@
 rbac:
   enabled: true
 
-pangeo:
-  jupyterhub:
-    singleuser:
-      image:
-        name: rhodium/notebook
-        tag: 4444a717c6b4e10796a0a3ba2871f03b2613a890
-      storage:
-        capacity: 10Gi
-    hub:
-      db:
-        upgrade: true
-      pdb:
-        enabled: false
-        minAvailable: 0
-      extraConfig:
-        customPodHook: |
-          from kubernetes import client
-          def modify_pod_hook(spawner, pod):
-              pod.spec.containers[0].security_context = client.V1SecurityContext(
-                  privileged=True,
-                  capabilities=client.V1Capabilities(
-                      add=['SYS_ADMIN']
-                  )
-              )
-              return pod
-          c.KubeSpawner.modify_pod_hook = modify_pod_hook
-          c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
-          c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/']
+jupyterhub:
+  singleuser:
+    image:
+      name: rhodium/notebook
+      tag: 4444a717c6b4e10796a0a3ba2871f03b2613a890
+    storage:
+      capacity: 10Gi
+  hub:
+    db:
+      upgrade: true
+    pdb:
+      enabled: false
+      minAvailable: 0
+    extraConfig:
+      customPodHook: |
+        from kubernetes import client
+        def modify_pod_hook(spawner, pod):
+            pod.spec.containers[0].security_context = client.V1SecurityContext(
+                privileged=True,
+                capabilities=client.V1Capabilities(
+                    add=['SYS_ADMIN']
+                )
+            )
+            return pod
+        c.KubeSpawner.modify_pod_hook = modify_pod_hook
+        c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
+        c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/']
 # The templates section is borrowed from the pangeo approach, i.e.
 # https://github.com/pangeo-data/pangeo-cloud-federation/blob/staging/deployments/ocean/config/common.yaml
 # TODO: Maybe just merge this template into the notebook image repo and do the
 # configuration there rather than maintaining a separate repo and mounting it
 # in this deploy config?
-      extraVolumes:
-        - name: custom-templates
-          gitRepo:
-            repository: "https://github.com/RhodiumGroup/rhodium-custom-jupyterhub-templates.git"
-      extraVolumeMounts:
-        - mountPath: /usr/local/share/jupyterhub/custom_templates
-          name: custom-templates
-          subPath: "rhodium-custom-jupyterhub-templates/templates"
-        - mountPath: /usr/local/share/jupyterhub/static/custom
-          name: custom-templates
-          subPath: "rhodium-custom-jupyterhub-templates/assets"
+    extraVolumes:
+      - name: custom-templates
+        gitRepo:
+          repository: "https://github.com/RhodiumGroup/rhodium-custom-jupyterhub-templates.git"
+    extraVolumeMounts:
+      - mountPath: /usr/local/share/jupyterhub/custom_templates
+        name: custom-templates
+        subPath: "rhodium-custom-jupyterhub-templates/templates"
+      - mountPath: /usr/local/share/jupyterhub/static/custom
+        name: custom-templates
+        subPath: "rhodium-custom-jupyterhub-templates/assets"
 
-    scheduling:
-      userPlaceholder:
-        enabled: false
+  scheduling:
+    userPlaceholder:
+      enabled: false
 
-    cull:
-      timeout: 259200
+  cull:
+    timeout: 259200
