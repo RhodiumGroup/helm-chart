@@ -26,8 +26,8 @@ jupyterhub:
             )
             return pod
         c.KubeSpawner.modify_pod_hook = modify_pod_hook
-        c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
-        c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/']
+        c.JupyterHub.logo_file = '/usr/local/share/jupyterhub/static/custom/images/logo.png'
+        c.JupyterHub.template_paths = ['/usr/local/share/jupyterhub/custom_templates/']
 # The templates section is borrowed from the pangeo approach, i.e.
 # https://github.com/pangeo-data/pangeo-cloud-federation/blob/staging/deployments/ocean/config/common.yaml
 # TODO: Maybe just merge this template into the notebook image repo and do the
