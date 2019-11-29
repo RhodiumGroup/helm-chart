@@ -5,9 +5,11 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: 4444a717c6b4e10796a0a3ba2871f03b2613a890
+      tag: c9a90c7266d833d9e1775b8b57098e2f9fdf2d4b
     storage:
       capacity: 10Gi
+      dynamic:
+        storageClass: pd-ssd
   hub:
     db:
       upgrade: true
@@ -48,6 +50,11 @@ jupyterhub:
   scheduling:
     userPlaceholder:
       enabled: false
-
+    userPods:
+      nodeAffinity:
+        matchNodePurpose: require
+    corePods:
+      nodeAffinity:
+        matchNodePurpose: require
   cull:
     timeout: 259200
