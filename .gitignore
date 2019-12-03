@@ -4,3 +4,4 @@ kubernetes/helm-config.yaml
 rhg-hub/charts/
 rhg-hub/values.yaml
 rhg-hub/secret.yaml
+*.ipynb_checkpoints
