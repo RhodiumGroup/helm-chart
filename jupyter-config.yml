@@ -1,15 +1,18 @@
-rbac:
-  enabled: true
-
 jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: c9a90c7266d833d9e1775b8b57098e2f9fdf2d4b
+      tag: c189c49077ca5ffe36c9e538b7fcd89f39eedc66
     storage:
       capacity: 10Gi
       dynamic:
         storageClass: pd-ssd
+    cpu:
+      limit: 4
+      guarantee: 1
+    memory:
+      limit: 12G
+      guarantee: 4G
   hub:
     db:
       upgrade: true
@@ -48,6 +51,8 @@ jupyterhub:
         subPath: "rhodium-custom-jupyterhub-templates/assets"
 
   scheduling:
+    userScheduler:
+      enabled: true
     userPlaceholder:
       enabled: false
     userPods:
@@ -58,3 +63,36 @@ jupyterhub:
         matchNodePurpose: require
   cull:
     timeout: 259200
+
+  auth:
+    type: github
+    github:
+      callbackUrl: "https://test2.climate-kube.com/hub/oauth_callback"
+    scopes:
+      - "read:user"
+    admin:
+      access: true
+      users:
+        - bolliger32
+        - brews
+        - delgadom
+        - dgergel
+    whitelist:
+      users:
+        - bolliger32
+        - brews
+        - delgadom
+        - dgergel
+        - alihamidi1
+        - andyhultgren
+        - cledna
+        - dpa9694
+        - ferleejc
+        - hanskolus
+        - hpitt
+        - jaysayre
+        - kemccusker
+        - mattgoldklang
+        - samirasiddique
+        - smohan-rhg
+        - wjherndon
