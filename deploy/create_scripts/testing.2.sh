@@ -14,15 +14,16 @@ NUM_NODES=1
 MAX_WORKER_NODES=200
 MIN_WORKER_NODES=0
 DISK_SIZE=100
+DISK_TYPE=pd-ssd
 NB_MACHINE_TYPE=n1-highmem-8
 WORKER_MACHINE_TYPE=n1-highmem-8
 PREEMPTIBLE_FLAG=
 # PREEMPTIBLE_FLAG=--preemptible
 
-Start cluster on Google cloud
+# Start cluster on Google cloud
 gcloud container clusters create $CLUSTER_NAME --num-nodes=$NUM_NODES \
   --machine-type=n1-standard-2 --zone=$ZONE --project=$PROJECTID \
-  --enable-ip-alias --no-enable-legacy-authorization
+  --enable-ip-alias --no-enable-legacy-authorization --disk-type=${DISK_TYPE}
 
 # get rid of default pool that we don't want
 gcloud container node-pools delete default-pool
@@ -38,7 +39,7 @@ gcloud container node-pools create core-pool --cluster=${CLUSTER_NAME} \
 jupyter_taints="hub.jupyter.org_dedicated=user:NoSchedule"
 jupyter_labels="hub.jupyter.org/node-purpose=user"
 gcloud container node-pools create jupyter-pool --cluster=${CLUSTER_NAME} \
-  --machine-type=${NB_MACHINE_TYPE} --disk-type=pd-ssd --zone=${ZONE} \
+  --machine-type=${NB_MACHINE_TYPE} --disk-type=${DISK_TYPE} --zone=${ZONE} \
   --num-nodes=0 --enable-autoscaling --min-nodes=0 --max-nodes=10 \
   --node-taints ${jupyter_taints} --node-labels ${jupyter_labels}
 

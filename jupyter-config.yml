@@ -6,7 +6,9 @@ jupyterhub:
     storage:
       capacity: 10Gi
       dynamic:
-        storageClass: pd-ssd
+# storageClass should be changed to pd-ssd if/when we create a new cluster that uses
+# this disk type
+        storageClass: standard
     cpu:
       limit: 4
       guarantee: 1
