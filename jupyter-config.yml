@@ -6,15 +6,13 @@ jupyterhub:
     storage:
       capacity: 10Gi
       dynamic:
-# storageClass should be changed to pd-ssd if/when we create a new cluster that uses
-# this disk type
-        storageClass: standard
+        storageClass: pd-ssd
     cpu:
       limit: 4
       guarantee: 1
     memory:
-      limit: 12G
-      guarantee: 4G
+      limit: 24G
+      guarantee: 6G
   hub:
     db:
       upgrade: true
@@ -23,16 +21,6 @@ jupyterhub:
       minAvailable: 0
     extraConfig:
       customPodHook: |
-        from kubernetes import client
-        def modify_pod_hook(spawner, pod):
-            pod.spec.containers[0].security_context = client.V1SecurityContext(
-                privileged=True,
-                capabilities=client.V1Capabilities(
-                    add=['SYS_ADMIN']
-                )
-            )
-            return pod
-        c.KubeSpawner.modify_pod_hook = modify_pod_hook
         c.JupyterHub.logo_file = '/usr/local/share/jupyterhub/static/custom/images/logo.png'
         c.JupyterHub.template_paths = ['/usr/local/share/jupyterhub/custom_templates/']
 # The templates section is borrowed from the pangeo approach, i.e.
@@ -66,12 +54,18 @@ jupyterhub:
   cull:
     timeout: 259200
 
+  proxy:
+    secretToken: OVERRIDEME
+    https:
+      letsencrypt:
+        contactEmail: mdelgado@rhg.com
+
   auth:
     type: github
-    github:
-      callbackUrl: "https://test2.climate-kube.com/hub/oauth_callback"
     scopes:
       - "read:user"
+    orgWhitelist:
+      - RhodiumGroup
     admin:
       access: true
       users:
@@ -79,22 +73,9 @@ jupyterhub:
         - brews
         - delgadom
         - dgergel
+        - mattgoldklang
     whitelist:
       users:
         - bolliger32
-        - brews
-        - delgadom
-        - dgergel
-        - alihamidi1
-        - andyhultgren
-        - cledna
         - dpa9694
-        - ferleejc
-        - hanskolus
-        - hpitt
-        - jaysayre
-        - kemccusker
-        - mattgoldklang
-        - samirasiddique
-        - smohan-rhg
-        - wjherndon
+        - mayaanorman
