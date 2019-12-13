@@ -6,7 +6,8 @@ jupyterhub:
     storage:
       capacity: 10Gi
       dynamic:
-        storageClass: pd-ssd
+        storageClass: ssd
+        # storageClass: standard
     cpu:
       limit: 4
       guarantee: 1
