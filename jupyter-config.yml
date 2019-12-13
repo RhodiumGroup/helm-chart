@@ -2,12 +2,11 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: b46e2cda7727af3eef095279da220df283b57a66
+      tag: 91e8177fe0db3a60b343ff01a5deb699bcb6eb2a
     storage:
       capacity: 10Gi
       dynamic:
-# storageClass should be changed to pd-ssd if/when we create a new cluster that uses
-# this disk type
+        # storageClass: ssd
         storageClass: standard
     cpu:
       limit: 3.75
@@ -23,23 +22,10 @@ jupyterhub:
       minAvailable: 0
     extraConfig:
       customPodHook: |
-        from kubernetes import client
-        def modify_pod_hook(spawner, pod):
-            pod.spec.containers[0].security_context = client.V1SecurityContext(
-                privileged=True,
-                capabilities=client.V1Capabilities(
-                    add=['SYS_ADMIN']
-                )
-            )
-            return pod
-        c.KubeSpawner.modify_pod_hook = modify_pod_hook
         c.JupyterHub.logo_file = '/usr/local/share/jupyterhub/static/custom/images/logo.png'
         c.JupyterHub.template_paths = ['/usr/local/share/jupyterhub/custom_templates/']
 # The templates section is borrowed from the pangeo approach, i.e.
 # https://github.com/pangeo-data/pangeo-cloud-federation/blob/staging/deployments/ocean/config/common.yaml
-# TODO: Maybe just merge this template into the notebook image repo and do the
-# configuration there rather than maintaining a separate repo and mounting it
-# in this deploy config?
     extraVolumes:
       - name: custom-templates
         gitRepo:
@@ -66,12 +52,18 @@ jupyterhub:
   cull:
     timeout: 259200
 
+  proxy:
+    secretToken: OVERRIDEME
+    https:
+      letsencrypt:
+        contactEmail: mdelgado@rhg.com
+
   auth:
     type: github
-    github:
-      callbackUrl: "https://test2.climate-kube.com/hub/oauth_callback"
     scopes:
       - "read:user"
+    orgWhitelist:
+      - RhodiumGroup
     admin:
       access: true
       users:
@@ -79,22 +71,9 @@ jupyterhub:
         - brews
         - delgadom
         - dgergel
+        - mattgoldklang
     whitelist:
       users:
         - bolliger32
-        - brews
-        - delgadom
-        - dgergel
-        - alihamidi1
-        - andyhultgren
-        - cledna
         - dpa9694
-        - ferleejc
-        - hanskolus
-        - hpitt
-        - jaysayre
-        - kemccusker
-        - mattgoldklang
-        - samirasiddique
-        - smohan-rhg
-        - wjherndon
+        - mayaanorman
