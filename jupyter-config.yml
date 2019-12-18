@@ -2,7 +2,7 @@ jupyterhub:
   singleuser:
     image:
       name: rhodium/notebook
-      tag: 91e8177fe0db3a60b343ff01a5deb699bcb6eb2a
+      tag: v0.3.0-alpha.1
     storage:
       capacity: 10Gi
       dynamic:
@@ -22,8 +22,19 @@ jupyterhub:
       minAvailable: 0
     extraConfig:
       customPodHook: |
-        c.JupyterHub.logo_file = '/usr/local/share/jupyterhub/static/custom/images/logo.png'
-        c.JupyterHub.template_paths = ['/usr/local/share/jupyterhub/custom_templates/']
+            # runs container in privileged mode for FUSE mount access
+            from kubernetes import client
+            def modify_pod_hook(spawner, pod):
+                pod.spec.containers[0].security_context = client.V1SecurityContext(
+                    privileged=True,
+                    capabilities=client.V1Capabilities(
+                        add=['SYS_ADMIN']
+                    )
+                )
+                return pod
+            c.KubeSpawner.modify_pod_hook = modify_pod_hook
+            c.JupyterHub.logo_file = '/usr/local/share/jupyterhub/static/custom/images/logo.png'
+            c.JupyterHub.template_paths = ['/usr/local/share/jupyterhub/custom_templates/']
 # The templates section is borrowed from the pangeo approach, i.e.
 # https://github.com/pangeo-data/pangeo-cloud-federation/blob/staging/deployments/ocean/config/common.yaml
     extraVolumes:
