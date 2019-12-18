@@ -6,9 +6,13 @@ set -e
 # environment variables for this URL. If one does not exist, create the
 # OAuth app using github organization oauth settings.
 
-# Make sure you're logged in to gcloud and have the correct permissions
+# Make sure you're logged in to gcloud and have the correct permissions, and that
+# your current account is the one you would like to use for this cluster
+
+
 EMAIL=$(gcloud config get-value account)
 PROJECTID=$(gcloud config get-value project)
+REGION=$(gcloud config get-value compute/region)
 ZONE=$(gcloud config get-value compute/zone)
 CLUSTER_NAME=ganymede
 DEPLOYMENT_NAME=ganymede
@@ -123,6 +127,11 @@ sleep 120
 
 echo; echo "retrieving external IP"
 EXTERNAL_IP=$(kubectl -n ${CLUSTER_NAME} get service proxy-public -o wide | awk '{print $4}' | tail -n1)
+
+# Reserve static IP
+gcloud compute addresses create ${CLUSTER_NAME} \
+  --addresses ${EXTERNAL_IP} \
+  --region ${REGION}
 
 # Modify DNS record set to direct cluster URL to proxy IP
 if [[ "${DNS_ZONE}"!="" ]]; then
