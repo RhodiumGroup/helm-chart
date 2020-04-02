@@ -18,6 +18,9 @@ env:
   - PROJECT_ID="rhg-project-1"
   - ZONE="us-west1-a"
 
+install:
+- pip install pyyaml
+
 script:
 - bash test_pairing.sh
 
