@@ -7,23 +7,30 @@ jupyterhub:
         description: "This is the stable build of our <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>. Use this if you're not sure."
         kubespawner_override:
           image: rhodium/notebook:v0.3.0-alpha.1
-          cpu_limit: 7.5
-          mem_limit: 48G
           start_timeout: 900
-      - display_name: ""
-        description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>. Don't use this unless you know your workload requires more than 24GB of memory or 4 CPUs. If your notebook is running out of memory unexpectedly, check to make sure you don't have an xarray dimension explosion or something before just boosting the memory."
+      - display_name: "Rhodium: base stable (large)"
+        description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>"
         kubespawner_override:
           image: rhodium/notebook:v0.3.0-alpha.1
+          cpu_limit: 7.5
+          mem_limit: 48G
       - display_name: "Rhodium:base latest"
         description: "This is the version of the notebook deployed on <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@master</a>. Use this if you want to test out new features!"
         kubespawner_override:
           image: rhodium/notebook:latest
+      - display_name: "Rhodium:base latest (large)"
+        description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@master</a>"
+        kubespawner_override:
+          image: rhodium/notebook:latest
+          cpu_limit: 7.5
+          mem_limit: 48G
+          start_timeout: 900
       - display_name: 'Coastal: pyTC stable'
         description: "Known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/pyTC-v0.1.0\">rhodium/docker_images@dev-pyTC-base branch</a>"
         kubespawner_override:
           image: 'rhodium/notebook:pyTC-v0.1.0'
       - display_name: 'Coastal: pyTC stable (large)'
-        description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/pyTC-v0.1.0\">rhodium/docker_images@dev-pyTC-base branch</a>. Don't use this unless you know your workload requires more than 24GB of memory or 4 CPUs. If your notebook is running out of memory unexpectedly, check to make sure you don't have an xarray dimension explosion or something before just boosting the memory."
+        description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/pyTC-v0.1.0\">rhodium/docker_images@dev-pyTC-base branch</a>"
         kubespawner_override:
           image: 'rhodium/notebook:pyTC-v0.1.0'
           cpu_limit: 7.5
@@ -33,6 +40,13 @@ jupyterhub:
         description: "Latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/dev-pyTC-base\">rhodium/docker_images@dev-pyTC-base branch</a>"
         kubespawner_override:
           image: 'rhodium/notebook:dev-pyTC-base'
+      - display_name: "Coastal: pyTC latest (large)"
+        description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/dev-pyTC-base\">rhodium/docker_images@dev-pyTC-base branch</a>"
+        kubespawner_override:
+          image: 'rhodium/notebook:dev-pyTC-base'
+          cpu_limit: 7.5
+          mem_limit: 48G
+          start_timeout: 900
     # image:
     #   name: rhodium/notebook
     #   tag: v0.3.0-alpha.1
