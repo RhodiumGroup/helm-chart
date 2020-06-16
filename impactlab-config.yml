@@ -40,14 +40,14 @@ jupyterhub:
       limit: 24G
       guarantee: 24G
     start_timeout: 900
-    pullPolicy: always
+    pullPolicy: Always
   hub:
     db:
       upgrade: true
     pdb:
       enabled: false
       minAvailable: 0
-    imagePullPolicy: always
+    imagePullPolicy: Always
     extraConfig:
       customPodHook: |
             # runs container in privileged mode for FUSE mount access
