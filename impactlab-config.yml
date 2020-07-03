@@ -1,62 +1,70 @@
-rbac:
-  enabled: true
-
 jupyterhub:
   singleuser:
-    image:
-      name: rhodium/notebook
-      tag: v0.2.5
+    # see https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html for a
+    # description of configuration options
+    profileList:
+      - display_name: "Rhodium:base stable"
+        description: "This is the stable build of our <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>. Use this if you're not sure."
+        kubespawner_override:
+          image: rhodium/notebook:v0.3.0-alpha.1
+          cpu_limit: 7.5
+          mem_limit: 48G
+          start_timeout: 900
+      - display_name: "Rhodium: base stable (large)"
+        description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>. Don't use this unless you know your workload requires more than 24GB of memory or 4 CPUs. If your notebook is running out of memory unexpectedly, check to make sure you don't have an xarray dimension explosion or something before just boosting the memory."
+        kubespawner_override:
+          image: rhodium/notebook:v0.3.0-alpha.1
+      - display_name: "Rhodium:base latest"
+        description: "This is the version of the notebook deployed on <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@master</a>. Use this if you want to test out new features!"
+        kubespawner_override:
+          image: rhodium/notebook:latest
+      - display_name: "Rhodium:base latest (large)"
+        description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@master</a>. Don't use this unless you know your workload requires more than 24GB of memory or 4 CPUs. If your notebook is running out of memory unexpectedly, check to make sure you don't have an xarray dimension explosion or something before just boosting the memory."
+        kubespawner_override:
+          image: rhodium/notebook:latest
+          cpu_limit: 7.5
+          mem_limit: 48G
+          start_timeout: 900
+    # image:
+    #   name: rhodium/notebook
+    #   tag: v0.3.0-alpha.1
     storage:
       capacity: 10Gi
-    dynamic:
-      storageClass: jupyterhub-user-ssd
-    serviceAccountName: daskkubernetes
-    cmd: ['start-singleuser.sh']
-    defaultUrl: "/lab"
-    storage:
-      extraVolumes:
-        - name: fuse
-          hostPath:
-            path: /dev/fuse
-      extraVolumeMounts:
-        - name: fuse
-          mountPath: /dev/fuse
-    cloudMetadata:
-      enabled: true
-
+      dynamic:
+        # storageClass: ssd
+        storageClass: standard
+    cpu:
+      limit: 3.75
+      guarantee: 3.75
+    memory:
+      limit: 24G
+      guarantee: 24G
+    start_timeout: 900
+    pullPolicy: Always
   hub:
+    db:
+      upgrade: true
+    pdb:
+      enabled: false
+      minAvailable: 0
+    imagePullPolicy: Always
     extraConfig:
       customPodHook: |
-        from kubernetes import client
-        def modify_pod_hook(spawner, pod):
-            pod.spec.containers[0].security_context = client.V1SecurityContext(
-                privileged=True,
-                capabilities=client.V1Capabilities(
-                    add=['SYS_ADMIN']
+            # runs container in privileged mode for FUSE mount access
+            from kubernetes import client
+            def modify_pod_hook(spawner, pod):
+                pod.spec.containers[0].security_context = client.V1SecurityContext(
+                    privileged=True,
+                    capabilities=client.V1Capabilities(
+                        add=['SYS_ADMIN']
+                    )
                 )
-            )
-            return pod
-        c.KubeSpawner.modify_pod_hook = modify_pod_hook
-        c.Authenticator.whitelist = {
-            "andyhultgren",
-            "atrisovic",
-            "brews",
-            "delgadom",
-            "dgergel",
-            "dpa9694",
-            "jiacan",
-            "jrising",
-            "kemccusker",
-            "mattgoldklang",
-            "simondgreenhill",
-            "trinetta",
-          }
-
-
-        c.JupyterHub.logo_file = '/usr/local/share/jupyter/hub/static/custom/images/logo.png'
-        c.JupyterHub.template_paths = ['/usr/local/share/jupyter/hub/custom_templates/',
-                                    '/usr/local/share/jupyter/hub/templates/']
-
+                return pod
+            c.KubeSpawner.modify_pod_hook = modify_pod_hook
+            c.JupyterHub.logo_file = '/usr/local/share/jupyterhub/static/custom/images/logo.png'
+            c.JupyterHub.template_paths = ['/usr/local/share/jupyterhub/custom_templates/']
+# The templates section is borrowed from the pangeo approach, i.e.
+# https://github.com/pangeo-data/pangeo-cloud-federation/blob/staging/deployments/ocean/config/common.yaml
     extraVolumes:
       - name: custom-templates
         gitRepo:
@@ -69,35 +77,38 @@ jupyterhub:
         name: custom-templates
         subPath: "climate-impactlab-templates/assets"
 
-    image:
-      name: jupyterhub/k8s-hub
-      tag: 0.8.2
+  scheduling:
+    userScheduler:
+      enabled: true
+    userPlaceholder:
+      enabled: false
+    userPods:
+      nodeAffinity:
+        matchNodePurpose: require
+    corePods:
+      nodeAffinity:
+        matchNodePurpose: require
+  cull:
+    timeout: 259200
 
   proxy:
+    secretToken: OVERRIDEME
     https:
       letsencrypt:
         contactEmail: mdelgado@rhg.com
 
   auth:
     type: github
-
+    scopes:
+      - "read:user"
+    orgWhitelist:
+      - RhodiumGroup
+      - ClimateImpactLab
     admin:
       access: true
       users:
+        - bolliger32
+        - brews
         - delgadom
-        - andyhultgren
         - dgergel
-        - jiacan
-        - jrising
         - kemccusker
-        - trinetta
-
-  cull:
-    enabled: true
-    users: false
-    timeout: 172800
-    every: 600
-
-  prePuller:
-    hook:
-      enabled: true

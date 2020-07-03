@@ -2,7 +2,7 @@
 
 set -e
 
-NOTEBOOK_IMAGE=$(python -c "import yaml; f = open('jupyter-config.yml'); spec = yaml.load(f.read()); print('{}:{}'.format(spec['jupyterhub']['singleuser']['image']['name'], spec['jupyterhub']['singleuser']['image']['tag']));")
+NOTEBOOK_IMAGE=$(python -c "import yaml; f = open('jupyter-config.yml'); spec = yaml.safe_load(f.read()); print(spec['jupyterhub']['singleuser']['profileList'][0]['kubespawner_override']['image']);")
 
 echo "pull notebook $NOTEBOOK_IMAGE"
 docker pull $NOTEBOOK_IMAGE
@@ -39,7 +39,7 @@ echo "start the tester notebook"
 docker start tester
 
 echo "run test suite"
-docker exec tester python /usr/bin/notebook_test.py
+docker exec tester /opt/conda/bin/python /usr/bin/notebook_test.py
 
 echo "closing containers"
 docker stop $(docker ps -q);
