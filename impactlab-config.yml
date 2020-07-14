@@ -70,10 +70,10 @@ jupyterhub:
         gitRepo:
           repository: "https://github.com/ClimateImpactLab/climate-impactlab-templates.git"
     extraVolumeMounts:
-      - mountPath: /usr/local/share/jupyter/hub/custom_templates
+      - mountPath: /usr/local/share/jupyterhub/custom_templates
         name: custom-templates
         subPath: "climate-impactlab-templates/templates"
-      - mountPath: /usr/local/share/jupyter/hub/static/custom
+      - mountPath: /usr/local/share/jupyterhub/static/custom
         name: custom-templates
         subPath: "climate-impactlab-templates/assets"
 
