@@ -2,7 +2,7 @@
 
 set -e
 
-NOTEBOOK_IMAGE=$(python -c "import yaml; f = open('jupyter-config.yml'); spec = yaml.safe_load(f.read()); print(spec['jupyterhub']['singleuser']['profileList'][0]['kubespawner_override']['image']);")
+NOTEBOOK_IMAGE=$(python -c "import yaml; f = open('jupyter-config.yml'); spec = yaml.safe_load(f.read()); print(spec['jupyterhub']['singleuser']['image']['name']+":"+spec['jupyterhub']['singleuser']['image']['tag']);")
 
 echo "pull notebook $NOTEBOOK_IMAGE"
 docker pull $NOTEBOOK_IMAGE
