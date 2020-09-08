@@ -1,17 +1,24 @@
 jupyterhub:
+  # until resolved: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1393
+  prePuller:
+    hook:
+      enabled: false
+    continuous:
+      enabled: false
   singleuser:
     # see https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html for a
     # description of configuration options
+    image:
+      pullPolicy: 'Always'
+      name: rhodium/notebook
+      tag: v0.3.0-alpha.1
     startTimeout: 900
     profileList:
       - display_name: "Rhodium:base stable"
         description: "This is the stable build of our <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>. Use this if you're not sure."
-        kubespawner_override:
-          image: rhodium/notebook:v0.3.0-alpha.1
       - display_name: "Rhodium: base stable (large)"
         description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>"
         kubespawner_override:
-          image: rhodium/notebook:v0.3.0-alpha.1
           cpu_limit: 7.5
           cpu_guarantee: 7.5
           mem_limit: 45G
@@ -20,12 +27,10 @@ jupyterhub:
         description: "This is the version of the notebook deployed on <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@master</a>. Use this if you want to test out new features!"
         kubespawner_override:
           image: rhodium/notebook:latest
-          image_pull_policy: 'Always'
       - display_name: "Rhodium:base latest (large)"
         description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@master</a>"
         kubespawner_override:
           image: rhodium/notebook:latest
-          image_pull_policy: 'Always'
           cpu_limit: 7.5
           cpu_guarantee: 7.5
           mem_limit: 45G
@@ -45,13 +50,11 @@ jupyterhub:
       - display_name: 'Coastal: pyTC latest'
         description: "Latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/dev-pyTC-base\">rhodium/docker_images@dev-pyTC-base branch</a>"
         kubespawner_override:
-          image: 'rhodium/notebook:dev-pyTC-base'
-          image_pull_policy: 'Always'
+          image: 'rhodium/notebook:coastal-gateway'
       - display_name: "Coastal: pyTC latest (large)"
         description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/dev-pyTC-base\">rhodium/docker_images@dev-pyTC-base branch</a>"
         kubespawner_override:
-          image: 'rhodium/notebook:dev-pyTC-base'
-          image_pull_policy: 'Always'
+          image: 'rhodium/notebook:coastal-gateway'
           cpu_limit: 7.5
           cpu_guarantee: 7.5
           mem_limit: 45G
@@ -67,14 +70,14 @@ jupyterhub:
     memory:
       limit: 22.5G
       guarantee: 22.5G
-    pullPolicy: Always
   hub:
-    db:
-      upgrade: true
-    pdb:
-      enabled: false
-      minAvailable: 0
-    imagePullPolicy: Always
+    resources:
+      requests:
+        cpu: "0.25"
+        memory: 0.5Gi
+      limits:
+        cpu: "1.25"
+        memory: 1Gi
     extraConfig:
       customPodHook: |
             # runs container in privileged mode for FUSE mount access
@@ -103,7 +106,9 @@ jupyterhub:
       - mountPath: /usr/local/share/jupyterhub/static/custom
         name: custom-templates
         subPath: "rhodium-custom-jupyterhub-templates/assets"
-
+    services:
+      dask-gateway:
+        apiToken: OVERRIDEME
   scheduling:
     userScheduler:
       enabled: true
@@ -140,6 +145,19 @@ jupyterhub:
         - mattgoldklang
     whitelist:
       users:
-        - bolliger32
         - dpa9694
-        - mayaanorman
+        - njdepsky
+
+dask-gateway:
+  gateway:
+    auth:
+      jupyterhub:
+        apiToken: OVERRIDEME
+    backend:
+      worker:
+        extraPodConfig:
+          tolerations:
+            - key: "cloud.google.com/gke-preemptible"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
