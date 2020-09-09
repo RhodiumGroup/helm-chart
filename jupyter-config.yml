@@ -1,5 +1,6 @@
+# This config is based off of the approach used by the Pangeo cloud deployments
+# (https://github.com/pangeo-data/pangeo-cloud-federation)
 jupyterhub:
-  # until resolved: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1393
   prePuller:
     hook:
       enabled: false
@@ -14,45 +15,46 @@ jupyterhub:
       tag: v0.3.0-alpha.1
     startTimeout: 900
     profileList:
-      - display_name: "Rhodium:base stable"
-        description: "This is the stable build of our <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>. Use this if you're not sure."
-      - display_name: "Rhodium: base stable (large)"
-        description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>"
+      # commenting out stable options b/c not compatible with this gateway-based cluster until they are updated
+      # - display_name: "Rhodium:base stable"
+      #   description: "This is the stable build of our <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>. Use this if you're not sure."
+      # - display_name: "Rhodium: base stable (large)"
+      #   description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>"
+      #   kubespawner_override:
+      #     cpu_limit: 7.5
+      #     cpu_guarantee: 7.5
+      #     mem_limit: 45G
+      #     mem_guarantee: 45G
+      - display_name: "Rhodium base: latest"
+        description: "This is the version of the notebook deployed on <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@gateway</a>. Use this if you want to test out new features!"
         kubespawner_override:
+          image: rhodium/notebook:gateway
+      - display_name: "Rhodium base: latest (large)"
+        description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@gateway</a>"
+        kubespawner_override:
+          image: rhodium/notebook:gateway
           cpu_limit: 7.5
           cpu_guarantee: 7.5
           mem_limit: 45G
           mem_guarantee: 45G
-      - display_name: "Rhodium:base latest"
-        description: "This is the version of the notebook deployed on <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@master</a>. Use this if you want to test out new features!"
-        kubespawner_override:
-          image: rhodium/notebook:latest
-      - display_name: "Rhodium:base latest (large)"
-        description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@master</a>"
-        kubespawner_override:
-          image: rhodium/notebook:latest
-          cpu_limit: 7.5
-          cpu_guarantee: 7.5
-          mem_limit: 45G
-          mem_guarantee: 45G
-      - display_name: 'Coastal: pyTC stable'
-        description: "Known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/pyTC-v0.1.0\">rhodium/docker_images@dev-pyTC-base branch</a>"
-        kubespawner_override:
-          image: 'rhodium/notebook:pyTC-v0.1.0'
-      - display_name: 'Coastal: pyTC stable (large)'
-        description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/pyTC-v0.1.0\">rhodium/docker_images@dev-pyTC-base branch</a>"
-        kubespawner_override:
-          image: 'rhodium/notebook:pyTC-v0.1.0'
-          cpu_limit: 7.5
-          cpu_guarantee: 7.5
-          mem_limit: 45G
-          mem_guarantee: 45G
-      - display_name: 'Coastal: pyTC latest'
-        description: "Latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/dev-pyTC-base\">rhodium/docker_images@dev-pyTC-base branch</a>"
+      # - display_name: 'Coastal: pyTC stable'
+      #   description: "Known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/pyTC-v0.1.0\">rhodium/docker_images@dev-pyTC-base branch</a>"
+      #   kubespawner_override:
+      #     image: 'rhodium/notebook:pyTC-v0.1.0'
+      # - display_name: 'Coastal: pyTC stable (large)'
+      #   description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/pyTC-v0.1.0\">rhodium/docker_images@dev-pyTC-base branch</a>"
+      #   kubespawner_override:
+      #     image: 'rhodium/notebook:pyTC-v0.1.0'
+      #     cpu_limit: 7.5
+      #     cpu_guarantee: 7.5
+      #     mem_limit: 45G
+      #     mem_guarantee: 45G
+      - display_name: 'Coastal: latest'
+        description: "Latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/coastal-gateway\">rhodium/docker_images@coastal-gateway branch</a>"
         kubespawner_override:
           image: 'rhodium/notebook:coastal-gateway'
       - display_name: "Coastal: pyTC latest (large)"
-        description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/dev-pyTC-base\">rhodium/docker_images@dev-pyTC-base branch</a>"
+        description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/coastal-gateway\">rhodium/docker_images@coastal-gateway branch</a>"
         kubespawner_override:
           image: 'rhodium/notebook:coastal-gateway'
           cpu_limit: 7.5
@@ -93,8 +95,6 @@ jupyterhub:
             c.KubeSpawner.modify_pod_hook = modify_pod_hook
             c.JupyterHub.logo_file = '/usr/local/share/jupyterhub/static/custom/images/logo.png'
             c.JupyterHub.template_paths = ['/usr/local/share/jupyterhub/custom_templates/']
-# The templates section is borrowed from the pangeo approach, i.e.
-# https://github.com/pangeo-data/pangeo-cloud-federation/blob/staging/deployments/ocean/config/common.yaml
     extraVolumes:
       - name: custom-templates
         gitRepo:
@@ -151,6 +151,7 @@ jupyterhub:
 dask-gateway:
   gateway:
     auth:
+      type: jupyterhub
       jupyterhub:
         apiToken: OVERRIDEME
     backend:
@@ -161,3 +162,64 @@ dask-gateway:
               operator: "Equal"
               value: "true"
               effect: "NoSchedule"
+          imagePullPolicy: "Always"
+      scheduler:
+        extraPodConfig:
+          image: 
+    extraConfig:
+      optionHandler: |
+        from dask_gateway_server.options import Options, String, Select, Mapping
+
+        def cluster_options(user):
+
+            # A mapping from profile name to configuration overrides
+            standard_cores = 1.94
+            standard_mem = 12.7
+            scaling_factors = {
+              "micro": 0.5,
+              "standard": 1,
+              "big": 2,
+              "giant": 4
+            }
+
+            def option_handler(options):
+                if (":" not in options.worker_image) or (":" not in options.scheduler_image):
+                    raise ValueError("When specifying an image you must also provide a tag")
+                extra_annotations = {
+                    "hub.jupyter.org/username": user.name
+                }
+                extra_labels = {
+                    "hub.jupyter.org/username": user.name,
+                }
+                
+                # add extra pip packages to be picked up by prepare.sh
+                this_env = options.environment
+                if options.extra_pip_packages != "":
+                  this_env["EXTRA_PIP_PACKAGES"] = options.extra_pip_packages
+
+                return {
+                    "worker_cores": scaling_factors[options.profile] * standard_cores,
+                    "worker_memory": f"{scaling_factors[options.profile] * standard_mem:.2f}G",
+                    # setting images separately here to get a light-weight scheduler
+                    "worker_extra_container_config": {"image": options.worker_image},
+                    "scheduler_extra_container_config": {"image": options.scheduler_image},
+                    "scheduler_extra_pod_annotations": extra_annotations,
+                    "worker_extra_pod_annotations": extra_annotations,
+                    "scheduler_extra_pod_labels": extra_labels,
+                    "worker_extra_pod_labels": extra_labels,
+                    "environment": this_env,
+                }
+            return Options(
+                Select(
+                  "profile",
+                  ["micro", "standard", "big", "giant"],
+                  default="standard",
+                  label="Cluster Profile"
+                ),
+                String("worker_image", default="rhodium/worker:gateway", label="Worker Image"),
+                String("scheduler_image", default="rhodium/scheduler:gateway", label="Scheduler Image"),
+                String("extra_pip_packages", default="", label="Extra pip Packages"),
+                Mapping("environment", default={}, label="Environment Variables"),
+                handler=option_handler,
+            )
+        c.Backend.cluster_options = cluster_options
