@@ -171,14 +171,12 @@ dask-gateway:
             }
 
             default_tolerations = {
-                "0": [
-                    {
-                        "key": "k8s.dask.org_dedicated",
-                        "operator": "Equal",
-                        "value": "worker",
-                        "effect": "NoSchedule"
-                    }
-                ]
+                "0": {
+                    "key": "k8s.dask.org_dedicated",
+                    "operator": "Equal",
+                    "value": "worker",
+                    "effect": "NoSchedule"
+                }
             }
 
             def option_handler(options):
