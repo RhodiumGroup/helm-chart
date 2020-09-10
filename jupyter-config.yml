@@ -203,9 +203,14 @@ dask-gateway:
                 this_env["GOOGLE_APPLICATION_CREDENTIALS"] = f"/opt/gcsfuse_tokens/{options.cred_name}.json"
 
                 # pod config
-                extra_pod_config = {
+                extra_worker_pod_config = {
                     "imagePullPolicy": "Always",
                     "tolerations": list(options.worker_tolerations.values())
+                }
+
+                extra_scheduler_pod_config = {
+                    "imagePullPolicy": "Always",
+                    "image": options.scheduler_image
                 }
 
                 return {
@@ -214,11 +219,12 @@ dask-gateway:
                     # setting images separately here to get a light-weight scheduler
                     "worker_extra_container_config": {"image": options.worker_image},
                     "scheduler_extra_container_config": {"image": options.scheduler_image},
-                    "scheduler_extra_pod_annotations": extra_annotations,
                     "worker_extra_pod_annotations": extra_annotations,
-                    "worker_extra_pod_config": extra_pod_config,
-                    "scheduler_extra_pod_labels": extra_labels,
+                    "worker_extra_pod_config": extra_worker_pod_config,
                     "worker_extra_pod_labels": extra_labels,
+                    "scheduler_extra_pod_annotations": extra_annotations,
+                    "scheduler_extra_pod_config": extra_scheduler_pod_config,
+                    "scheduler_extra_pod_labels": extra_labels,
                     "environment": this_env,
                 }
             return Options(
