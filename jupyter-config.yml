@@ -72,6 +72,8 @@ jupyterhub:
     memory:
       limit: 22.5G
       guarantee: 22.5G
+    cloudMetadata:
+      enabled: true
   hub:
     resources:
       requests:
