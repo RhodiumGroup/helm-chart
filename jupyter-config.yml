@@ -53,7 +53,7 @@ jupyterhub:
         description: "Latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/coastal-gateway\">rhodium/docker_images@coastal-gateway branch</a>"
         kubespawner_override:
           image: 'rhodium/notebook:coastal-gateway'
-      - display_name: "Coastal: pyTC latest (large)"
+      - display_name: "Coastal: latest (large)"
         description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/coastal-gateway\">rhodium/docker_images@coastal-gateway branch</a>"
         kubespawner_override:
           image: 'rhodium/notebook:coastal-gateway'
