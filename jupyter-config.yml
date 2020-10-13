@@ -215,6 +215,9 @@ dask-gateway:
                     "worker_extra_container_config": {
                         "image": options.worker_image,
                         "imagePullPolicy": "Always",
+                        "securityContext": {
+                          "privileged": True # allows gcsfuse mount
+                        }
                     },
                     "scheduler_extra_container_config": {
                         "image": options.scheduler_image,
