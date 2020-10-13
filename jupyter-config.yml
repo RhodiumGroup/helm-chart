@@ -231,6 +231,7 @@ dask-gateway:
                     "scheduler_extra_pod_annotations": extra_annotations,
                     "scheduler_extra_pod_labels": extra_labels,
                     "environment": this_env,
+                    "idle_timeout": 3600*6 # 6 hour idle timeout
                 }
             return Options(
                 Select(
