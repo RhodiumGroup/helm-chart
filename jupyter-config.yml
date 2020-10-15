@@ -167,7 +167,7 @@ dask-gateway:
         def cluster_options(user):
 
             # A mapping from profile name to configuration overrides
-            standard_cores = 1.94
+            standard_cores = 1.8
             standard_mem = 12.7
             scaling_factors = {
                 "micro": 0.5,
