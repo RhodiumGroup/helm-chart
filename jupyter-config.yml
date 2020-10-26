@@ -13,7 +13,7 @@ jupyterhub:
       pullPolicy: 'Always'
       name: rhodium/notebook
       tag: v0.3.0-alpha.1
-    startTimeout: 900
+    startTimeout: 600
     profileList:
       # commenting out stable options b/c not compatible with this gateway-based cluster until they are updated
       # - display_name: "Rhodium:base stable"
