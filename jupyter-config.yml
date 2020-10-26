@@ -2,7 +2,7 @@ jupyterhub:
   singleuser:
     # see https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html for a
     # description of configuration options
-    startTimeout: 600
+    startTimeout: 600 # shorter times increase likelihood of erroneous timeout w/ large image, longer increases time spent to diagnose actual problem
     profileList:
       - display_name: "Rhodium:base stable"
         description: "This is the stable build of our <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>. Use this if you're not sure."
