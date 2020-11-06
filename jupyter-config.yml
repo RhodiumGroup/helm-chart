@@ -152,10 +152,6 @@ jupyterhub:
 
 dask-gateway:
   gateway:
-    backend:
-      scheduler:
-        extraPodConfig:
-          imagePullPolicy: "Always"
     auth:
       type: jupyterhub
       jupyterhub:
@@ -163,6 +159,7 @@ dask-gateway:
     extraConfig:
       optionHandler: |
         from dask_gateway_server.options import Options, String, Select, Mapping
+        from math import ceil
 
         def cluster_options(user):
 
@@ -208,8 +205,13 @@ dask-gateway:
                 # add google cloud auth
                 this_env["GOOGLE_APPLICATION_CREDENTIALS"] = f"/opt/gcsfuse_tokens/{options.cred_name}.json"
 
+                # calculate cpu request and limit
+                cpu_req = scaling_factors[options.profile] * standard_cores
+
                 return {
-                    "worker_cores": scaling_factors[options.profile] * standard_cores,
+                    "worker_cores": cpu_req,
+                    # see https://github.com/dask/dask-gateway/blob/e409f0e87f45e0a51fd7c009b5ec010bc5253bf1/dask-gateway-server/dask_gateway_server/backends/kubernetes/controller.py#L1055
+                    "worker_cores_limit": ceil(cpu_req), # this is necessary to get correct nthreads
                     "worker_memory": f"{scaling_factors[options.profile] * standard_mem:.2f}G",
                     # setting images separately here to get a light-weight scheduler
                     "worker_extra_container_config": {
