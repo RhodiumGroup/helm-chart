@@ -12,43 +12,19 @@ jupyterhub:
     image:
       pullPolicy: 'Always'
       name: rhodium/notebook
-      tag: v0.3.0-alpha.1
+      tag: gateway
     startTimeout: 600
     profileList:
-      # commenting out stable options b/c not compatible with this gateway-based cluster until they are updated
-      # - display_name: "Rhodium:base stable"
-      #   description: "This is the stable build of our <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>. Use this if you're not sure."
-      # - display_name: "Rhodium: base stable (large)"
-      #   description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/v0.3.0-alpha.1\">default notebook</a>"
-      #   kubespawner_override:
-      #     cpu_limit: 7.5
-      #     cpu_guarantee: 7.5
-      #     mem_limit: 45G
-      #     mem_guarantee: 45G
       - display_name: "Rhodium base: latest"
-        description: "This is the version of the notebook deployed on <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@gateway</a>. Use this if you want to test out new features!"
-        kubespawner_override:
-          image: rhodium/notebook:gateway
+        description: "This is the version of the notebook deployed on <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@gateway</a>."
+        default: true
       - display_name: "Rhodium base: latest (large)"
         description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@gateway</a>"
         kubespawner_override:
-          image: rhodium/notebook:gateway
           cpu_limit: 7.5
           cpu_guarantee: 7.5
           mem_limit: 45G
           mem_guarantee: 45G
-      # - display_name: 'Coastal: pyTC stable'
-      #   description: "Known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/pyTC-v0.1.0\">rhodium/docker_images@dev-pyTC-base branch</a>"
-      #   kubespawner_override:
-      #     image: 'rhodium/notebook:pyTC-v0.1.0'
-      # - display_name: 'Coastal: pyTC stable (large)'
-      #   description: "Larger notebook allowance, with known stable build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/pyTC-v0.1.0\">rhodium/docker_images@dev-pyTC-base branch</a>"
-      #   kubespawner_override:
-      #     image: 'rhodium/notebook:pyTC-v0.1.0'
-      #     cpu_limit: 7.5
-      #     cpu_guarantee: 7.5
-      #     mem_limit: 45G
-      #     mem_guarantee: 45G
       - display_name: 'Coastal: latest'
         description: "Latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/coastal-gateway\">rhodium/docker_images@coastal-gateway branch</a>"
         kubespawner_override:
@@ -63,9 +39,6 @@ jupyterhub:
           mem_guarantee: 45G
     storage:
       capacity: 10Gi
-      dynamic:
-        # storageClass: ssd
-        storageClass: standard
     cpu:
       limit: 3.75
       guarantee: 3.75
@@ -111,6 +84,16 @@ jupyterhub:
     services:
       dask-gateway:
         apiToken: OVERRIDEME
+    # this allows the dask-gateway pods to talk to the hub
+    networkPolicy:
+      ingress:
+        - ports:
+          - port: http
+          - port: https
+          from:
+            - podSelector:
+                matchLabels:
+                  gateway.dask.org/instance: "adrastea-dask-gateway"
   scheduling:
     userScheduler:
       enabled: true
@@ -131,6 +114,29 @@ jupyterhub:
       enabled: true
       letsencrypt:
         contactEmail: mdelgado@rhg.com
+    # this allows dask-gateway pods to talk to the proxy and autohttps pods
+    chp:
+      networkPolicy:
+        ingress:
+          - ports:
+            - port: http
+            - port: https
+            from:
+              - podSelector:
+                  matchLabels:
+                    gateway.dask.org/instance: "adrastea-dask-gateway"
+    traefik:
+      networkPolicy:
+        ingress:
+          - ports:
+            - port: http
+            - port: https
+            from:
+              - podSelector:
+                  matchLabels:
+                    gateway.dask.org/instance: "adrastea-dask-gateway"
+
+
 
   auth:
     type: github
@@ -155,7 +161,6 @@ jupyterhub:
 dask-gateway:
   gateway:
     auth:
-      type: jupyterhub
       jupyterhub:
         apiToken: OVERRIDEME
     extraConfig:
@@ -190,9 +195,8 @@ dask-gateway:
                 extra_annotations = {
                     "hub.jupyter.org/username": user.name
                 }
-                extra_labels = {
+                default_extra_labels = {
                     "hub.jupyter.org/username": user.name,
-                    **options.extra_worker_labels
                 }
                 
                 this_env = options.env_items
@@ -231,9 +235,15 @@ dask-gateway:
                     "worker_extra_pod_config": {
                         "tolerations": list(options.worker_tolerations.values())
                     },
-                    "worker_extra_pod_labels": extra_labels,
+                    "worker_extra_pod_labels": {
+                        **default_extra_labels,
+                        **options.extra_worker_labels,
+                    },
                     "scheduler_extra_pod_annotations": extra_annotations,
-                    "scheduler_extra_pod_labels": extra_labels,
+                    "scheduler_extra_pod_labels": default_extra_labels,
+                    "scheduler_extra_pod_config": {
+                        "tolerations": list(default_tolerations.values()),
+                    },
                     "environment": this_env,
                     "idle_timeout": 3600*6 # 6 hour idle timeout
                 }
