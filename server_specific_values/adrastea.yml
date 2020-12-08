@@ -1,0 +1,34 @@
+# this allows the dask-gateway pods to talk to the hub
+jupyterhub:
+  hub:
+    networkPolicy:
+      ingress:
+        - ports:
+          - port: http
+          - port: https
+          from:
+            - podSelector:
+                matchLabels:
+                  gateway.dask.org/instance: "adrastea-dask-gateway"
+  # this allows dask-gateway pods to talk to the proxy and autohttps pods
+  proxy:
+    chp:
+      networkPolicy:
+        ingress:
+          - ports:
+            - port: http
+            - port: https
+            from:
+              - podSelector:
+                  matchLabels:
+                    gateway.dask.org/instance: "adrastea-dask-gateway"
+    traefik:
+      networkPolicy:
+        ingress:
+          - ports:
+            - port: http
+            - port: https
+            from:
+              - podSelector:
+                  matchLabels:
+                    gateway.dask.org/instance: "adrastea-dask-gateway"
