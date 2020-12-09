@@ -110,9 +110,6 @@ jupyterhub:
     scopes:
       - "read:user"
       - "read:org"
-    github:
-      orgWhitelist:
-        - RhodiumGroup
     admin:
       access: true
       users:
@@ -121,11 +118,6 @@ jupyterhub:
         - delgadom
         - dgergel
         - mattgoldklang
-    whitelist:
-      users:
-        - dpa9694
-        - jtschoi
-        - njdepsky
 
 dask-gateway:
   gateway:
