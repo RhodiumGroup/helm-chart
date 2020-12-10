@@ -23,16 +23,16 @@ CORE_MACHINE_TYPE=n1-standard-2
 # PREEMPTIBLE_FLAG=
 PREEMPTIBLE_FLAG=--preemptible
 
-# # Start cluster on Google cloud
-# gcloud container clusters create $CLUSTER_NAME \
-#   --num-nodes=$NUM_NODES \
-#   --machine-type=n1-standard-2 \
-#   --zone=$ZONE \
-#   --project=$PROJECTID \
-#   --enable-ip-alias \
-#   --no-enable-basic-auth \
-#   --disk-type=${DISK_TYPE} \
-#   --enable-network-policy
+# Start cluster on Google cloud
+gcloud container clusters create $CLUSTER_NAME \
+  --num-nodes=$NUM_NODES \
+  --machine-type=n1-standard-2 \
+  --zone=$ZONE \
+  --project=$PROJECTID \
+  --enable-ip-alias \
+  --no-enable-basic-auth \
+  --disk-type=${DISK_TYPE} \
+  --enable-network-policy
 
 # set default cluster for future commands
 gcloud config set container/cluster $CLUSTER_NAME
