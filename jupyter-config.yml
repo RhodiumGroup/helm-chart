@@ -11,28 +11,28 @@ jupyterhub:
     # description of configuration options
     image:
       pullPolicy: 'Always'
-      name: rhodium/notebook
-      tag: gateway
+      name: gcr.io/rhg-project-1/notebook
+      tag: latest
     startTimeout: 600
     profileList:
-      - display_name: "Rhodium base: latest"
-        description: "This is the version of the notebook deployed on <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@gateway</a>."
+      - display_name: "Rhodium base: stable"
+        description: "This is the stable version of the notebook deployed on <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@gateway</a>."
         default: true
-      - display_name: "Rhodium base: latest (large)"
-        description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images\">docker_images@gateway</a>"
+      - display_name: "Rhodium base: stable (large)"
+        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@gateway</a>"
         kubespawner_override:
           cpu_limit: 7.5
           cpu_guarantee: 7.5
           mem_limit: 45G
           mem_guarantee: 45G
-      - display_name: 'Coastal: latest'
-        description: "Latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/coastal-gateway\">rhodium/docker_images@coastal-gateway branch</a>"
+      - display_name: 'Coastal: stable'
+        description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">rhodium/docker_images@coastal-gateway branch</a>"
         kubespawner_override:
-          image: 'rhodium/notebook:coastal-gateway'
-      - display_name: "Coastal: latest (large)"
-        description: "Larger notebook allowance, with the latest build of <a href=\"https://github.com/RhodiumGroup/docker_images/tree/coastal-gateway\">rhodium/docker_images@coastal-gateway branch</a>"
+          image: 'gcr.io/rhg-project-1/notebook:coastal'
+      - display_name: "Coastal: stable (large)"
+        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">rhodium/docker_images@coastal-gateway branch</a>"
         kubespawner_override:
-          image: 'rhodium/notebook:coastal-gateway'
+          image: 'gcr.io/rhg-project-1/notebook:coastal'
           cpu_limit: 7.5
           cpu_guarantee: 7.5
           mem_limit: 45G
