@@ -10,29 +10,54 @@ jupyterhub:
     # see https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html for a
     # description of configuration options
     image:
-      pullPolicy: 'Always'
+      pullPolicy: "Always"
       name: gcr.io/rhg-project-1/notebook
-      tag: latest
+      tag: v1.0.0
     startTimeout: 600
     profileList:
       - display_name: "Rhodium base: stable"
-        description: "This is the stable version of the notebook deployed on <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@gateway</a>."
+        description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>. (v1.0.0"
         default: true
       - display_name: "Rhodium base: stable (large)"
-        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@gateway</a>"
+        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a> (v1.0.0)"
         kubespawner_override:
           cpu_limit: 7.5
           cpu_guarantee: 7.5
           mem_limit: 45G
           mem_guarantee: 45G
-      - display_name: 'Coastal: stable'
-        description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">rhodium/docker_images@coastal-gateway branch</a>"
+      - display_name: "Rhodium base: latest"
+        description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>."
+        default: true
         kubespawner_override:
-          image: 'gcr.io/rhg-project-1/notebook:coastal'
+          image: gcr.io/rhg-project-1/notebook:latest
+      - display_name: "Rhodium base: latest (large)"
+        description: "Larger notebook allowance, with the latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:latest
+          cpu_limit: 7.5
+          cpu_guarantee: 7.5
+          mem_limit: 45G
+          mem_guarantee: 45G
+      - display_name: "Coastal: stable"
+        description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
       - display_name: "Coastal: stable (large)"
-        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">rhodium/docker_images@coastal-gateway branch</a>"
+        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
         kubespawner_override:
-          image: 'gcr.io/rhg-project-1/notebook:coastal'
+          image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
+          cpu_limit: 7.5
+          cpu_guarantee: 7.5
+          mem_limit: 45G
+          mem_guarantee: 45G
+      - display_name: "Coastal: latest"
+        description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:coastal
+      - display_name: "Coastal: latest (large)"
+        description: "Larger notebook allowance, with the latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:coastal
           cpu_limit: 7.5
           cpu_guarantee: 7.5
           mem_limit: 45G
