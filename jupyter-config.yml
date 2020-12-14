@@ -27,7 +27,6 @@ jupyterhub:
           mem_guarantee: 45G
       - display_name: "Rhodium base: latest"
         description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>."
-        default: true
         kubespawner_override:
           image: gcr.io/rhg-project-1/notebook:latest
       - display_name: "Rhodium base: latest (large)"
