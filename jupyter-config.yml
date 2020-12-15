@@ -268,7 +268,7 @@ dask-gateway:
                     default="standard",
                     label="Cluster Memory Size"
                 ),
-                Float("cpus", default=1, label="Worker CPUs"),
+                Float("cpus", default=1, min=1, max=7.5, label="Worker CPUs"),
                 String("worker_image", default="gcr.io/rhg-project-1/worker:latest", label="Worker Image"),
                 String("scheduler_image", default="gcr.io/rhg-project-1/scheduler:latest", label="Scheduler Image"),
                 String("extra_pip_packages", default="", label="Extra pip Packages"),
@@ -278,7 +278,7 @@ dask-gateway:
                 Mapping("extra_worker_labels", default={}, label="Extra Worker Pod Labels"),
                 Mapping("env_items", default={}, label="Environment Variables"),
                 String("scheduler_memory", default="22.5 G", label="Scheduler Memory"),
-                Float("scheduler_cores", default=3.75, label="Scheduler CPUs"),
+                Float("scheduler_cores", default=3.75, min=1, max=7.5, label="Scheduler CPUs"),
                 handler=option_handler,
             )
         c.Backend.cluster_options = cluster_options
