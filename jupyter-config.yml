@@ -180,7 +180,10 @@ dask-gateway:
         def cluster_options(user):
 
             # A mapping from profile name to configuration overrides
-            standard_cores = 1.8
+            # 12/15/20: always using one core unless explicitly defined by 
+            # `cpus` due to this issue: https://github.com/dask/dask-gateway/issues/364
+            # Can update this behavior if that gets addressed
+            # standard_cores = 1.8
             standard_mem = 12.7
             scaling_factors = {
                 "micro": 0.5,
@@ -223,12 +226,8 @@ dask-gateway:
                 # calculate cpu request and limit
                 cpu_req = scaling_factors[options.profile] * standard_cores
 
-                # if overridden, adjust CPUs
-                if options.worker_cores > 0:
-                    cpu_req = options.worker_cores
-
                 return {
-                    "worker_cores": cpu_req,
+                    "worker_cores": options.cpus,
                     # see https://github.com/dask/dask-gateway/blob/e409f0e87f45e0a51fd7c009b5ec010bc5253bf1/dask-gateway-server/dask_gateway_server/backends/kubernetes/controller.py#L1055
                     "worker_cores_limit": ceil(cpu_req), # this is necessary to get correct nthreads
                     "worker_memory": f"{scaling_factors[options.profile] * standard_mem:.2f}G",
@@ -267,11 +266,11 @@ dask-gateway:
                     "profile",
                     ["micro", "standard", "big", "giant"],
                     default="standard",
-                    label="Cluster Profile"
+                    label="Cluster Memory Size"
                 ),
-                Float("worker_cores", default=-1, label="Override Profile CPUs"),
-                String("worker_image", default="rhodium/worker:gateway", label="Worker Image"),
-                String("scheduler_image", default="rhodium/scheduler:gateway", label="Scheduler Image"),
+                Float("cpus", default=1, label="Worker CPUs"),
+                String("worker_image", default="gcr.io/rhg-project-1/worker:latest", label="Worker Image"),
+                String("scheduler_image", default="gcr.io/rhg-project-1/scheduler:latest", label="Scheduler Image"),
                 String("extra_pip_packages", default="", label="Extra pip Packages"),
                 String("gcsfuse_tokens", default="", label="GCSFUSE Tokens"),
                 String("cred_name", default="rhg-data", label="Bucket for Google Cloud Creds"),
@@ -279,7 +278,7 @@ dask-gateway:
                 Mapping("extra_worker_labels", default={}, label="Extra Worker Pod Labels"),
                 Mapping("env_items", default={}, label="Environment Variables"),
                 String("scheduler_memory", default="22.5 G", label="Scheduler Memory"),
-                Float("scheduler_cores", default=3.75, label="Scheduler Cores"),
+                Float("scheduler_cores", default=3.75, label="Scheduler CPUs"),
                 handler=option_handler,
             )
         c.Backend.cluster_options = cluster_options
