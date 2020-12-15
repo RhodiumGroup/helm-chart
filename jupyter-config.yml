@@ -15,16 +15,16 @@ jupyterhub:
       tag: v1.0.0
     startTimeout: 600
     profileList:
-      - display_name: "Rhodium base: stable"
-        description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>. (v1.0.0"
-        default: true
-      - display_name: "Rhodium base: stable (large)"
-        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a> (v1.0.0)"
-        kubespawner_override:
-          cpu_limit: 7.5
-          cpu_guarantee: 7.5
-          mem_limit: 45G
-          mem_guarantee: 45G
+      # - display_name: "Rhodium base: stable"
+      #   description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>. (v1.0.0"
+      #   default: true
+      # - display_name: "Rhodium base: stable (large)"
+      #   description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a> (v1.0.0)"
+      #   kubespawner_override:
+      #     cpu_limit: 7.5
+      #     cpu_guarantee: 7.5
+      #     mem_limit: 45G
+      #     mem_guarantee: 45G
       - display_name: "Rhodium base: latest"
         description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>."
         kubespawner_override:
@@ -37,30 +37,30 @@ jupyterhub:
           cpu_guarantee: 7.5
           mem_limit: 45G
           mem_guarantee: 45G
-      - display_name: "Coastal: stable"
-        description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
-        kubespawner_override:
-          image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
-      - display_name: "Coastal: stable (large)"
-        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
-        kubespawner_override:
-          image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
-          cpu_limit: 7.5
-          cpu_guarantee: 7.5
-          mem_limit: 45G
-          mem_guarantee: 45G
-      - display_name: "Coastal: latest"
-        description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
-        kubespawner_override:
-          image: gcr.io/rhg-project-1/notebook:coastal
-      - display_name: "Coastal: latest (large)"
-        description: "Larger notebook allowance, with the latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
-        kubespawner_override:
-          image: gcr.io/rhg-project-1/notebook:coastal
-          cpu_limit: 7.5
-          cpu_guarantee: 7.5
-          mem_limit: 45G
-          mem_guarantee: 45G
+      # - display_name: "Coastal: stable"
+      #   description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
+      #   kubespawner_override:
+      #     image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
+      # - display_name: "Coastal: stable (large)"
+      #   description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
+      #   kubespawner_override:
+      #     image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
+      #     cpu_limit: 7.5
+      #     cpu_guarantee: 7.5
+      #     mem_limit: 45G
+      #     mem_guarantee: 45G
+      # - display_name: "Coastal: latest"
+      #   description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
+      #   kubespawner_override:
+      #     image: gcr.io/rhg-project-1/notebook:coastal
+      # - display_name: "Coastal: latest (large)"
+      #   description: "Larger notebook allowance, with the latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
+      #   kubespawner_override:
+      #     image: gcr.io/rhg-project-1/notebook:coastal
+      #     cpu_limit: 7.5
+      #     cpu_guarantee: 7.5
+      #     mem_limit: 45G
+      #     mem_guarantee: 45G
     storage:
       capacity: 10Gi
     cpu:
@@ -150,7 +150,7 @@ dask-gateway:
         apiToken: OVERRIDEME
     extraConfig:
       optionHandler: |
-        from dask_gateway_server.options import Options, String, Select, Mapping
+        from dask_gateway_server.options import Options, String, Select, Mapping, Float
         from math import ceil
 
         def cluster_options(user):
@@ -199,6 +199,12 @@ dask-gateway:
                 # calculate cpu request and limit
                 cpu_req = scaling_factors[options.profile] * standard_cores
 
+                # if overridden, adjust CPUs (use 88% scaling factor to account for 
+                # kubernetes backend processes on node, see
+                # https://github.com/pangeo-data/pangeo-cloud-federation/blob/f0f1e8b19fc6e300e7bdc947299d7cf87cc3084e/pangeo-deploy/values.yaml#L120
+                if override_worker_cores > 0:
+                    cpu_req = .88 * override_worker_cores
+
                 return {
                     "worker_cores": cpu_req,
                     # see https://github.com/dask/dask-gateway/blob/e409f0e87f45e0a51fd7c009b5ec010bc5253bf1/dask-gateway-server/dask_gateway_server/backends/kubernetes/controller.py#L1055
@@ -230,7 +236,9 @@ dask-gateway:
                         "tolerations": list(default_tolerations.values()),
                     },
                     "environment": this_env,
-                    "idle_timeout": 3600*6 # 6 hour idle timeout
+                    "idle_timeout": 3600*6, #  hour idle timeout
+                    "scheduler_cores": options.scheduler_cores,
+                    "scheduler_memory": options.scheduler_memory,
                 }
             return Options(
                 Select(
@@ -239,6 +247,7 @@ dask-gateway:
                     default="standard",
                     label="Cluster Profile"
                 ),
+                Float("override_worker_cores", default=0, label="Override Profile CPUs"),
                 String("worker_image", default="rhodium/worker:gateway", label="Worker Image"),
                 String("scheduler_image", default="rhodium/scheduler:gateway", label="Scheduler Image"),
                 String("extra_pip_packages", default="", label="Extra pip Packages"),
@@ -247,6 +256,8 @@ dask-gateway:
                 Mapping("worker_tolerations", default=default_tolerations, label="Worker Pod Tolerations"),
                 Mapping("extra_worker_labels", default={}, label="Extra Worker Pod Labels"),
                 Mapping("env_items", default={}, label="Environment Variables"),
+                String("scheduler_memory", default="22.5 G", label="Scheduler Memory"),
+                Float("scheduler_cores", default=3.75, label="Scheduler Cores"),
                 handler=option_handler,
             )
         c.Backend.cluster_options = cluster_options
