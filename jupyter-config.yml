@@ -37,6 +37,30 @@ jupyterhub:
           cpu_guarantee: 7.5
           mem_limit: 45G
           mem_guarantee: 45G
+      # - display_name: "Octave: stable"
+      #   description: "Stable build of our Octave-enabled environment (v1.0.0)"
+      #   kubespawner_override:
+      #     image: gcr.io/rhg-project-1/notebook:v1.0.0-octave
+      # - display_name: "Octave: stable (large)"
+      #   description: "Larger notebook allowance, with the stable build our Octave-enabled environment (v1.0.0)"
+      #   kubespawner_override:
+      #     image: gcr.io/rhg-project-1/notebook:v1.0.0-octave
+      #     cpu_limit: 7.5
+      #     cpu_guarantee: 7.5
+      #     mem_limit: 45G
+      #     mem_guarantee: 45G
+      - display_name: "Octave: latest"
+        description: "Latest build of our Octave-enabled environment"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:octave
+      - display_name: "Octave: latest (large)"
+        description: "Larger notebook allowance, with the latest build our Octave-enabled environment"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:octave
+          cpu_limit: 7.5
+          cpu_guarantee: 7.5
+          mem_limit: 45G
+          mem_guarantee: 45G
       # - display_name: "Coastal: stable"
       #   description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
       #   kubespawner_override:
@@ -49,18 +73,18 @@ jupyterhub:
       #     cpu_guarantee: 7.5
       #     mem_limit: 45G
       #     mem_guarantee: 45G
-      # - display_name: "Coastal: latest"
-      #   description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
-      #   kubespawner_override:
-      #     image: gcr.io/rhg-project-1/notebook:coastal
-      # - display_name: "Coastal: latest (large)"
-      #   description: "Larger notebook allowance, with the latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
-      #   kubespawner_override:
-      #     image: gcr.io/rhg-project-1/notebook:coastal
-      #     cpu_limit: 7.5
-      #     cpu_guarantee: 7.5
-      #     mem_limit: 45G
-      #     mem_guarantee: 45G
+      - display_name: "Coastal: latest"
+        description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:coastal
+      - display_name: "Coastal: latest (large)"
+        description: "Larger notebook allowance, with the latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:coastal
+          cpu_limit: 7.5
+          cpu_guarantee: 7.5
+          mem_limit: 45G
+          mem_guarantee: 45G
     storage:
       capacity: 10Gi
     cpu:
