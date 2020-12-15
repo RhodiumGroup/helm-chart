@@ -200,8 +200,8 @@ dask-gateway:
                 cpu_req = scaling_factors[options.profile] * standard_cores
 
                 # if overridden, adjust CPUs
-                if worker_cores > 0:
-                    cpu_req = worker_cores
+                if options.worker_cores > 0:
+                    cpu_req = options.worker_cores
 
                 return {
                     "worker_cores": cpu_req,
