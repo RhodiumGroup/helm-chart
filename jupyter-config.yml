@@ -199,11 +199,9 @@ dask-gateway:
                 # calculate cpu request and limit
                 cpu_req = scaling_factors[options.profile] * standard_cores
 
-                # if overridden, adjust CPUs (use 88% scaling factor to account for 
-                # kubernetes backend processes on node, see
-                # https://github.com/pangeo-data/pangeo-cloud-federation/blob/f0f1e8b19fc6e300e7bdc947299d7cf87cc3084e/pangeo-deploy/values.yaml#L120
-                if override_worker_cores > 0:
-                    cpu_req = .88 * override_worker_cores
+                # if overridden, adjust CPUs
+                if worker_cores > 0:
+                    cpu_req = worker_cores
 
                 return {
                     "worker_cores": cpu_req,
@@ -236,7 +234,7 @@ dask-gateway:
                         "tolerations": list(default_tolerations.values()),
                     },
                     "environment": this_env,
-                    "idle_timeout": 3600*6, #  hour idle timeout
+                    "idle_timeout": 3600*6, # 6 hour idle timeout
                     "scheduler_cores": options.scheduler_cores,
                     "scheduler_memory": options.scheduler_memory,
                 }
@@ -247,7 +245,7 @@ dask-gateway:
                     default="standard",
                     label="Cluster Profile"
                 ),
-                Float("override_worker_cores", default=0, label="Override Profile CPUs"),
+                Float("worker_cores", default=-1, label="Override Profile CPUs"),
                 String("worker_image", default="rhodium/worker:gateway", label="Worker Image"),
                 String("scheduler_image", default="rhodium/scheduler:gateway", label="Scheduler Image"),
                 String("extra_pip_packages", default="", label="Extra pip Packages"),
