@@ -220,8 +220,9 @@ dask-gateway:
                 # add gcsfuse Tokens
                 this_env["GCSFUSE_TOKENS"] = options.gcsfuse_tokens
 
-                # add google cloud auth
-                this_env["GOOGLE_APPLICATION_CREDENTIALS"] = f"/srv/gcsfuse_tokens/{options.cred_name}.json"
+                # add google cloud auth if specified
+                if options.cred_name != "":
+                  this_env["GOOGLE_APPLICATION_CREDENTIALS"] = f"/srv/gcsfuse_tokens/{options.cred_name}.json"
 
                 # calculate cpu request and limit
                 # see above commend for why we are commenting out standard_cores for now
@@ -274,7 +275,7 @@ dask-gateway:
                 String("scheduler_image", default="gcr.io/rhg-project-1/scheduler:latest", label="Scheduler Image"),
                 String("extra_pip_packages", default="", label="Extra pip Packages"),
                 String("gcsfuse_tokens", default="", label="GCSFUSE Tokens"),
-                String("cred_name", default="rhg-data", label="Bucket for Google Cloud Creds"),
+                String("cred_name", default="", label="Bucket for Google Cloud Creds"),
                 Mapping("worker_tolerations", default=default_tolerations, label="Worker Pod Tolerations"),
                 Mapping("extra_worker_labels", default={}, label="Extra Worker Pod Labels"),
                 Mapping("env_items", default={}, label="Environment Variables"),
