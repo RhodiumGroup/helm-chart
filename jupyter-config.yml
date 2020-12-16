@@ -224,7 +224,8 @@ dask-gateway:
                 this_env["GOOGLE_APPLICATION_CREDENTIALS"] = f"/opt/gcsfuse_tokens/{options.cred_name}.json"
 
                 # calculate cpu request and limit
-                cpu_req = scaling_factors[options.profile] * standard_cores
+                # see above commend for why we are commenting out standard_cores for now
+                # cpu_req = scaling_factors[options.profile] * standard_cores
 
                 return {
                     "worker_cores": options.cpus,
