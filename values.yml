@@ -221,7 +221,7 @@ dask-gateway:
                 this_env["GCSFUSE_TOKENS"] = options.gcsfuse_tokens
 
                 # add google cloud auth
-                this_env["GOOGLE_APPLICATION_CREDENTIALS"] = f"/opt/gcsfuse_tokens/{options.cred_name}.json"
+                this_env["GOOGLE_APPLICATION_CREDENTIALS"] = f"/srv/gcsfuse_tokens/{options.cred_name}.json"
 
                 # calculate cpu request and limit
                 # see above commend for why we are commenting out standard_cores for now

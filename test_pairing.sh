@@ -41,7 +41,7 @@ set -e
 # docker start tester
 
 # echo "run test suite"
-# docker exec tester /opt/conda/bin/python /usr/bin/notebook_test.py
+# docker exec tester /srv/conda/envs/notebook/bin/python /usr/bin/notebook_test.py
 
 # echo "closing containers"
 # docker stop $(docker ps -q);
