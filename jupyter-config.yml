@@ -230,7 +230,7 @@ dask-gateway:
                 return {
                     "worker_cores": options.cpus,
                     # see https://github.com/dask/dask-gateway/blob/e409f0e87f45e0a51fd7c009b5ec010bc5253bf1/dask-gateway-server/dask_gateway_server/backends/kubernetes/controller.py#L1055
-                    "worker_cores_limit": ceil(cpu_req), # this is necessary to get correct nthreads
+                    "worker_cores_limit": ceil(options.cpus), # this is necessary to get correct nthreads
                     "worker_memory": f"{scaling_factors[options.profile] * standard_mem:.2f}G",
                     # setting images separately here to get a light-weight scheduler
                     "worker_extra_container_config": {
