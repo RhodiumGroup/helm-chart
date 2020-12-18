@@ -9,6 +9,10 @@ jupyterhub:
   singleuser:
     # see https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html for a
     # description of configuration options
+    extraEnv:
+      OMP_NUM_THREADS: 4
+      MKL_NUM_THREADS: 4
+      OPENBLAS_NUM_THREADS: 4
     image:
       pullPolicy: "Always"
       name: gcr.io/rhg-project-1/notebook
@@ -25,6 +29,10 @@ jupyterhub:
       #     cpu_guarantee: 7.5
       #     mem_limit: 45G
       #     mem_guarantee: 45G
+          # environment:
+          #   OMP_NUM_THREADS: 8
+          #   MKL_NUM_THREADS: 8
+          #   OPENBLAS_NUM_THREADS: 8
       - display_name: "Rhodium base: latest"
         description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>."
         kubespawner_override:
@@ -37,6 +45,10 @@ jupyterhub:
           cpu_guarantee: 7.5
           mem_limit: 45G
           mem_guarantee: 45G
+          environment:
+            OMP_NUM_THREADS: 8
+            MKL_NUM_THREADS: 8
+            OPENBLAS_NUM_THREADS: 8
       # - display_name: "Octave: stable"
       #   description: "Stable build of our Octave-enabled environment (v1.0.0)"
       #   kubespawner_override:
@@ -49,6 +61,10 @@ jupyterhub:
       #     cpu_guarantee: 7.5
       #     mem_limit: 45G
       #     mem_guarantee: 45G
+          # environment:
+          #   OMP_NUM_THREADS: 8
+          #   MKL_NUM_THREADS: 8
+          #   OPENBLAS_NUM_THREADS: 8
       - display_name: "Octave: latest"
         description: "Latest build of our Octave-enabled environment"
         kubespawner_override:
@@ -61,6 +77,10 @@ jupyterhub:
           cpu_guarantee: 7.5
           mem_limit: 45G
           mem_guarantee: 45G
+          environment:
+            OMP_NUM_THREADS: 8
+            MKL_NUM_THREADS: 8
+            OPENBLAS_NUM_THREADS: 8
       # - display_name: "Coastal: stable"
       #   description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
       #   kubespawner_override:
@@ -73,6 +93,10 @@ jupyterhub:
       #     cpu_guarantee: 7.5
       #     mem_limit: 45G
       #     mem_guarantee: 45G
+          # environment:
+          #   OMP_NUM_THREADS: 8
+          #   MKL_NUM_THREADS: 8
+          #   OPENBLAS_NUM_THREADS: 8
       - display_name: "Coastal: latest"
         description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
         kubespawner_override:
@@ -85,6 +109,10 @@ jupyterhub:
           cpu_guarantee: 7.5
           mem_limit: 45G
           mem_guarantee: 45G
+          environment:
+            OMP_NUM_THREADS: 8
+            MKL_NUM_THREADS: 8
+            OPENBLAS_NUM_THREADS: 8
     storage:
       capacity: 10Gi
     cpu:
@@ -225,8 +253,15 @@ dask-gateway:
                   this_env["GOOGLE_APPLICATION_CREDENTIALS"] = f"/opt/gcsfuse_tokens/{options.cred_name}.json"
 
                 # calculate cpu request and limit
-                # see above commend for why we are commenting out standard_cores for now
+                # see above comment for why we are commenting out standard_cores for now
                 # cpu_req = scaling_factors[options.profile] * standard_cores
+
+                # set threads appropriately
+                # (12/18/20) Currently setting to 1 b/c always only one thread available
+                # per dask thread
+                this_env["OMP_NUM_THREADS"]=1
+                this_env["MKL_NUM_THREADS"]=1
+                this_env["OPENBLAS_NUM_THREADS"]=1
 
                 return {
                     "worker_cores": options.cpus,
