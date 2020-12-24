@@ -1,0 +1,18 @@
+jupyterhub:
+  auth:
+    whitelist:
+      users:
+        # rhg employees
+        - ahamidi1
+        - hanskolus
+        - hhessRHG
+        - jk-sohal
+        - kemccusker
+        - rhg-smohan
+        - smohan-rhg
+        - tghouser
+        - wjherndon
+        # external collaborators
+        - dpa9694
+        - jtschoi
+        - njdepsky

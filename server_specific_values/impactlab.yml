@@ -1,0 +1,41 @@
+# this allows the dask-gateway pods to talk to the hub
+jupyterhub:
+  hub:
+    networkPolicy:
+      ingress:
+        - ports:
+          - port: http
+          - port: https
+          from:
+            - podSelector:
+                matchLabels:
+                  gateway.dask.org/instance: "impactlab-hub-dask-gateway"
+  # this allows dask-gateway pods to talk to the proxy and autohttps pods
+  proxy:
+    chp:
+      networkPolicy:
+        ingress:
+          - ports:
+            - port: http
+            - port: https
+            from:
+              - podSelector:
+                  matchLabels:
+                    gateway.dask.org/instance: "impactlab-hub-dask-gateway"
+    traefik:
+      networkPolicy:
+        ingress:
+          - ports:
+            - port: http
+            - port: https
+            from:
+              - podSelector:
+                  matchLabels:
+                    gateway.dask.org/instance: "impactlab-hub-dask-gateway"
+
+  # add climateimpactlab org to whitelist
+  auth:
+    github:
+      orgWhitelist:
+        - RhodiumGroup
+        - ClimateImpactLab
