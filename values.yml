@@ -29,20 +29,20 @@ jupyterhub:
     cloudMetadata:
       blockWithIptables: false
     profileList:
-      # - display_name: "Rhodium base: stable"
-      #   description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>. (v1.0.0"
-      #   default: true
-      # - display_name: "Rhodium base: stable (large)"
-      #   description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a> (v1.0.0)"
-      #   kubespawner_override:
-      #     cpu_limit: 7
-      #     cpu_guarantee: 7
-      #     mem_limit: 45G
-      #     mem_guarantee: 45G
-          # environment:
-          #   OMP_NUM_THREADS: "7"
-          #   MKL_NUM_THREADS: "7"
-          #   OPENBLAS_NUM_THREADS: "7"
+      - display_name: "Rhodium base: stable"
+        description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>. (v1.0.0)"
+        default: true
+      - display_name: "Rhodium base: stable (large)"
+        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a> (v1.0.0)"
+        kubespawner_override:
+          cpu_limit: 7
+          cpu_guarantee: 7
+          mem_limit: 45G
+          mem_guarantee: 45G
+          environment:
+            OMP_NUM_THREADS: "7"
+            MKL_NUM_THREADS: "7"
+            OPENBLAS_NUM_THREADS: "7"
       - display_name: "Rhodium base: latest"
         description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>."
         kubespawner_override:
@@ -59,22 +59,22 @@ jupyterhub:
             OMP_NUM_THREADS: "7"
             MKL_NUM_THREADS: "7"
             OPENBLAS_NUM_THREADS: "7"
-      # - display_name: "Octave: stable"
-      #   description: "Stable build of our Octave-enabled environment (v1.0.0)"
-      #   kubespawner_override:
-      #     image: gcr.io/rhg-project-1/notebook:v1.0.0-octave
-      # - display_name: "Octave: stable (large)"
-      #   description: "Larger notebook allowance, with the stable build our Octave-enabled environment (v1.0.0)"
-      #   kubespawner_override:
-      #     image: gcr.io/rhg-project-1/notebook:v1.0.0-octave
-      #     cpu_limit: 7
-      #     cpu_guarantee: 7
-      #     mem_limit: 45G
-      #     mem_guarantee: 45G
-          # environment:
-          #   OMP_NUM_THREADS: "7"
-          #   MKL_NUM_THREADS: "7"
-          #   OPENBLAS_NUM_THREADS: "7"
+      - display_name: "Octave: stable"
+        description: "Stable build of our Octave-enabled environment (v1.0.0)"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:v1.0.0-octave
+      - display_name: "Octave: stable (large)"
+        description: "Larger notebook allowance, with the stable build our Octave-enabled environment (v1.0.0)"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:v1.0.0-octave
+          cpu_limit: 7
+          cpu_guarantee: 7
+          mem_limit: 45G
+          mem_guarantee: 45G
+          environment:
+            OMP_NUM_THREADS: "7"
+            MKL_NUM_THREADS: "7"
+            OPENBLAS_NUM_THREADS: "7"
       - display_name: "Octave: latest"
         description: "Latest build of our Octave-enabled environment"
         kubespawner_override:
@@ -91,22 +91,22 @@ jupyterhub:
             OMP_NUM_THREADS: "7"
             MKL_NUM_THREADS: "7"
             OPENBLAS_NUM_THREADS: "7"
-      # - display_name: "Coastal: stable"
-      #   description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
-      #   kubespawner_override:
-      #     image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
-      # - display_name: "Coastal: stable (large)"
-      #   description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
-      #   kubespawner_override:
-      #     image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
-      #     cpu_limit: 7
-      #     cpu_guarantee: 7
-      #     mem_limit: 45G
-      #     mem_guarantee: 45G
-          # environment:
-          #   OMP_NUM_THREADS: "7"
-          #   MKL_NUM_THREADS: "7"
-          #   OPENBLAS_NUM_THREADS: "7"
+      - display_name: "Coastal: stable"
+        description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
+      - display_name: "Coastal: stable (large)"
+        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
+        kubespawner_override:
+          image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
+          cpu_limit: 7
+          cpu_guarantee: 7
+          mem_limit: 45G
+          mem_guarantee: 45G
+          environment:
+            OMP_NUM_THREADS: "7"
+            MKL_NUM_THREADS: "7"
+            OPENBLAS_NUM_THREADS: "7"
       - display_name: "Coastal: latest"
         description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
         kubespawner_override:
@@ -123,6 +123,11 @@ jupyterhub:
             OMP_NUM_THREADS: "7"
             MKL_NUM_THREADS: "7"
             OPENBLAS_NUM_THREADS: "7"
+      # uncomment test image to run tests (typically just on adrastea)
+      # - display_name: "Rhodium base: test"
+      #   description: "Test build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>."
+      #   kubespawner_override:
+      #     image: gcr.io/rhg-project-1/notebook:test
   hub:
     resources:
       requests:
@@ -305,7 +310,7 @@ dask-gateway:
                     default="standard",
                     label="Cluster Memory Size"
                 ),
-                Float("cpus", default=1, min=1, max=7.5, label="Worker CPUs"),
+                Float("cpus", default=1, min=1, max=7, label="Worker CPUs"),
                 String("worker_image", default="gcr.io/rhg-project-1/worker:latest", label="Worker Image"),
                 String("scheduler_image", default="gcr.io/rhg-project-1/scheduler:latest", label="Scheduler Image"),
                 String("extra_pip_packages", default="", label="Extra pip Packages"),
@@ -315,7 +320,7 @@ dask-gateway:
                 Mapping("extra_worker_labels", default={}, label="Extra Worker Pod Labels"),
                 Mapping("env_items", default={}, label="Environment Variables"),
                 String("scheduler_memory", default="22.5 G", label="Scheduler Memory"),
-                Float("scheduler_cores", default=3.75, min=1, max=7.5, label="Scheduler CPUs"),
+                Float("scheduler_cores", default=3.5, min=1, max=7, label="Scheduler CPUs"),
                 handler=option_handler,
             )
         c.Backend.cluster_options = cluster_options
