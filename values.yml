@@ -92,11 +92,11 @@ jupyterhub:
             MKL_NUM_THREADS: "7"
             OPENBLAS_NUM_THREADS: "7"
       - display_name: "Coastal: stable"
-        description: "Stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
+        description: "Stable build of our Coastal project environment (v1.0.0)"
         kubespawner_override:
           image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
       - display_name: "Coastal: stable (large)"
-        description: "Larger notebook allowance, with the stable build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a> (v1.0.0)"
+        description: "Larger notebook allowance, with the stable build our Coastal project environment (v1.0.0)"
         kubespawner_override:
           image: gcr.io/rhg-project-1/notebook:v1.0.0-coastal
           cpu_limit: 7
@@ -108,11 +108,11 @@ jupyterhub:
             MKL_NUM_THREADS: "7"
             OPENBLAS_NUM_THREADS: "7"
       - display_name: "Coastal: latest"
-        description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
+        description: "Latest build of our Coastal project environment"
         kubespawner_override:
           image: gcr.io/rhg-project-1/notebook:coastal
       - display_name: "Coastal: latest (large)"
-        description: "Larger notebook allowance, with the latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@coastal</a>"
+        description: "Larger notebook allowance, with the latest build of our Coastal project environment"
         kubespawner_override:
           image: gcr.io/rhg-project-1/notebook:coastal
           cpu_limit: 7
@@ -125,7 +125,7 @@ jupyterhub:
             OPENBLAS_NUM_THREADS: "7"
       # uncomment test image to run tests (typically just on adrastea)
       # - display_name: "Rhodium base: test"
-      #   description: "Test build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>."
+      #   description: "Test build of our Coastal project environment"
       #   kubespawner_override:
       #     image: gcr.io/rhg-project-1/notebook:test
   hub:
