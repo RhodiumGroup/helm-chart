@@ -9,10 +9,6 @@ jupyterhub:
   singleuser:
     # see https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html for a
     # description of configuration options
-    extraEnv:
-      OMP_NUM_THREADS: "4"
-      MKL_NUM_THREADS: "4"
-      OPENBLAS_NUM_THREADS: "4"
     image:
       pullPolicy: "Always"
       name: gcr.io/rhg-project-1/notebook
@@ -39,10 +35,6 @@ jupyterhub:
           cpu_guarantee: 7
           mem_limit: 45G
           mem_guarantee: 45G
-          environment:
-            OMP_NUM_THREADS: "7"
-            MKL_NUM_THREADS: "7"
-            OPENBLAS_NUM_THREADS: "7"
       - display_name: "Rhodium base: latest"
         description: "Latest build of <a href=\"https://gitlab.com/rhodium/infra_management/google/jupyterhub-images/docker_images\">docker_images@master</a>."
         kubespawner_override:
@@ -55,10 +47,6 @@ jupyterhub:
           cpu_guarantee: 7
           mem_limit: 45G
           mem_guarantee: 45G
-          environment:
-            OMP_NUM_THREADS: "7"
-            MKL_NUM_THREADS: "7"
-            OPENBLAS_NUM_THREADS: "7"
       - display_name: "Octave: stable"
         description: "Stable build of our Octave-enabled environment (v1.0.0)"
         kubespawner_override:
@@ -71,10 +59,6 @@ jupyterhub:
           cpu_guarantee: 7
           mem_limit: 45G
           mem_guarantee: 45G
-          environment:
-            OMP_NUM_THREADS: "7"
-            MKL_NUM_THREADS: "7"
-            OPENBLAS_NUM_THREADS: "7"
       - display_name: "Octave: latest"
         description: "Latest build of our Octave-enabled environment"
         kubespawner_override:
@@ -87,10 +71,6 @@ jupyterhub:
           cpu_guarantee: 7
           mem_limit: 45G
           mem_guarantee: 45G
-          environment:
-            OMP_NUM_THREADS: "7"
-            MKL_NUM_THREADS: "7"
-            OPENBLAS_NUM_THREADS: "7"
       - display_name: "Coastal: stable"
         description: "Stable build of our Coastal project environment (v1.0.0)"
         kubespawner_override:
@@ -103,10 +83,6 @@ jupyterhub:
           cpu_guarantee: 7
           mem_limit: 45G
           mem_guarantee: 45G
-          environment:
-            OMP_NUM_THREADS: "7"
-            MKL_NUM_THREADS: "7"
-            OPENBLAS_NUM_THREADS: "7"
       - display_name: "Coastal: latest"
         description: "Latest build of our Coastal project environment"
         kubespawner_override:
@@ -119,10 +95,6 @@ jupyterhub:
           cpu_guarantee: 7
           mem_limit: 45G
           mem_guarantee: 45G
-          environment:
-            OMP_NUM_THREADS: "7"
-            MKL_NUM_THREADS: "7"
-            OPENBLAS_NUM_THREADS: "7"
       # uncomment test image to run tests (typically just on adrastea)
       # - display_name: "Rhodium base: test"
       #   description: "Test build of our Coastal project environment"
