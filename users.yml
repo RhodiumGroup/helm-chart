@@ -8,10 +8,7 @@ jupyterhub:
         - hhessRHG
         - jk-sohal
         - kemccusker
-        - rhg-smohan
-        - smohan-rhg
         - tghouser
-        - wjherndon
         # external collaborators
         - dpa9694
         - jtschoi
